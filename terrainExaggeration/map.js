@@ -16,7 +16,42 @@ var mapOptions = {
       show: true,
       enablePickFeatures: false
     }
+  ],
+  layers:[
+    {
+      "pid": 3030,
+      "type": "geojson",
+      "name": "中国省界",
+      "url": "{dataServer}/file/geojson/areas/100000_full.json",
+      "symbol": {
+        "type": "polylineP",
+        "styleOptions": {
+          "color": "#ffffff",
+          "width": 2,
+          "opacity": 0.8,
+          "label": {
+            "text": "{name}",
+            "position": "center",
+            "font_size": 30,
+            "color": "#ffffff",
+            "outline": true,
+            "outlineColor": "#000000",
+            "scaleByDistance": true,
+            "scaleByDistance_far": 60000000,
+            "scaleByDistance_farValue": 0.2,
+            "scaleByDistance_near": 1000000,
+            "scaleByDistance_nearValue": 1,
+            "distanceDisplayCondition": true,
+            "distanceDisplayCondition_far": 12000000,
+            "distanceDisplayCondition_near": 0
+          }
+        }
+      },
+      "show": false,
+      "flyTo": false
+    },
   ]
+
 }
 
 /**
@@ -55,3 +90,37 @@ function mapFlyToPoint() {
 function mapSetCameraView() {
   map.setCameraView({ lat: 26.8764, lng: 91.148781, alt: 223798, heading: 0, pitch: -45 })
 }
+
+
+const geoJsonLayer= new mars3d.layer.GeoJsonLayer({
+  id: "可以根据此id在其他地方获取该图层",
+  url: "../json/ca_outline_FeaturesToJSON.geojson",
+  symbol: {
+    type: "polyline", // geojson内加载的矢量数据类型
+    styleOptions: {
+      color: "rgba(255,255,255,0.3)",
+      width: 2
+    }
+  },
+  popup: "{name}"
+})
+//map.addLayer(geoJsonLayer)
+
+const geoJsonLayer2 = new mars3d.layer.GeoJsonLayer({
+  url: "//data.mars3d.cn/file/geojson/wuhan-line2.json",
+  symbol: {
+    type: "polylineC",
+    styleOptions: {
+      width: 10, // 线宽
+      materialType: "PolylineGlow",
+      materialOptions: {
+        color: "#FF4500",
+        opacity: 0.9,
+        glowPower: 0.1 // 发光强度
+      }
+    }
+  },
+  // popup: "all",
+  show: true
+})
+map.addLayer(geoJsonLayer2)
