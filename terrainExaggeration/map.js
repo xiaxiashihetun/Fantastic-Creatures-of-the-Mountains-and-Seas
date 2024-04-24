@@ -92,35 +92,53 @@ function mapSetCameraView() {
 }
 
 
-const geoJsonLayer= new mars3d.layer.GeoJsonLayer({
-  id: "可以根据此id在其他地方获取该图层",
-  url: "../json/ca_outline_FeaturesToJSON.geojson",
-  symbol: {
-    type: "polyline", // geojson内加载的矢量数据类型
-    styleOptions: {
-      color: "rgba(255,255,255,0.3)",
-      width: 2
-    }
-  },
-  popup: "{name}"
-})
-//map.addLayer(geoJsonLayer)
+function showChinaLine() {
+  removeLayer()
 
-const geoJsonLayer2 = new mars3d.layer.GeoJsonLayer({
-  url: "//data.mars3d.cn/file/geojson/wuhan-line2.json",
-  symbol: {
-    type: "polylineC",
-    styleOptions: {
-      width: 10, // 线宽
-      materialType: "PolylineGlow",
-      materialOptions: {
-        color: "#FF4500",
-        opacity: 0.9,
-        glowPower: 0.1 // 发光强度
+  graphicLayer = new mars3d.layer.GeoJsonLayer({
+    name: "全国省界",
+    //url: "//data.mars3d.cn/file/geojson/areas/100000_full.json",
+    url: "./json/ceshi_FeaturesToJSON.json",
+    format: simplifyGeoJSON, // 用于自定义处理geojson
+    symbol: {
+      type: "polylineP",
+      styleOptions: {
+        width: 2,
+        materialType: mars3d.MaterialType.LineFlow,
+        materialOptions: {
+          color: "#00ffff",
+          image: "img/textures/fence-line.png",
+          speed: 10,
+          repeat_x: 10
+        },
+        distanceDisplayCondition: true,
+        distanceDisplayCondition_far: 12000000,
+        distanceDisplayCondition_near: 100000,
+        label: {
+          text: "{name}",
+          position: "{center}", // 省会位置center
+          font_size: 30,
+          color: "#ffffff",
+          outline: true,
+          outlineColor: "#000000",
+          scaleByDistance: true,
+          scaleByDistance_far: 60000000,
+          scaleByDistance_farValue: 0.2,
+          scaleByDistance_near: 1000000,
+          scaleByDistance_nearValue: 1,
+          distanceDisplayCondition: true,
+          distanceDisplayCondition_far: 10000000,
+          distanceDisplayCondition_near: 100000,
+          setHeight: 10000
+        }
       }
-    }
-  },
-  // popup: "all",
-  show: true
-})
-map.addLayer(geoJsonLayer2)
+    },
+    flyTo: true
+  })
+  map.addLayer(graphicLayer)
+
+  // 绑定事件
+  graphicLayer.on(mars3d.EventType.load, function (event) {
+    console.log("数据加载完成", event)
+  })
+}

@@ -7,8 +7,18 @@ var eventTarget = new mars3d.BaseClass() // 事件对象，用于抛出事件到
 // 需要覆盖config.json中地图属性参数（当前示例框架中自动处理合并）
 var mapOptions = {
   scene: {
-    center: { lat: 30.402686, lng: 116.303632, alt: 48692, heading: 3, pitch: -43 }
-  }
+    center: { lat: 30.468743, lng: 116.499464, alt: 67446, heading: 0, pitch: -45 }
+  },
+  basemaps: [
+    {
+      name: "ArcGIS影像",
+      icon: "/img/basemaps/esriWorldImagery.png",
+      type: "xyz",
+      url: "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+      show: true,
+      enablePickFeatures: false
+    }
+  ]
 }
 
 /**
@@ -19,12 +29,23 @@ var mapOptions = {
  */
 function onMounted(mapInstance) {
   map = mapInstance // 记录首次创建的map
-
   // map.on(mars3d.EventType.removeLayer, function (event) {
   //   console.log("移除了图层", event)
   // })
+  map.scene.globe.terrainExaggeration = 13 // 修改地形夸张程度
+  // 创建DIV数据图层
+  graphicLayer = new mars3d.layer.GraphicLayer()
+  map.addLayer(graphicLayer)
 
-  showDraw()
+  // 在layer上绑定监听事件
+  graphicLayer.on(mars3d.EventType.click, function (event) {
+    // event.stopPropagation()
+    console.log("监听layer，单击了矢量对象", event)
+  })
+  //showDraw()
+
+  addDemoGraphic1(graphicLayer)
+  addDemoGraphic3(graphicLayer)
 }
 
 /**
@@ -33,7 +54,64 @@ function onMounted(mapInstance) {
  */
 function onUnmounted() {
   map = null
+  // graphicLayer.remove()
+  // graphicLayer = null
 }
+
+ 
+
+function addDemoGraphic1(graphicLayer) {
+  const graphic = new mars3d.graphic.DivGraphic({
+    position: [116.741611, 31.408068, 75.5],
+    style: {
+      html: `<div class="marsBlackPanel  animation-spaceInDown">
+              <div class="marsBlackPanel-text">大湖名城,创新高地</div>
+          </div>`,
+      horizontalOrigin: Cesium.HorizontalOrigin.LEFT,
+      verticalOrigin: Cesium.VerticalOrigin.CENTER,
+      //distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 400000), // 按视距距离显示
+      //scaleByDistance:true,
+      clampToGround: false,//贴地显示
+      // 高亮时的样式
+      highlight: {
+        // type: mars3d.EventType.click,
+        className: "marsBlackPanel-highlight"
+      }
+    },
+    attr: { remark: "示例1" }
+  })
+  //graphicLayer.addGraphic(graphic)
+  graphic.addTo(graphicLayer)
+}
+
+
+function addDemoGraphic3(graphicLayer) {
+  const graphic = new mars3d.graphic.DivGraphic({
+    position: [116.960075, 31.19609, 237.4],
+    style: {
+      html: `<div class="marsGreenGradientPnl" >安徽欢迎您</div>`,
+      horizontalOrigin: Cesium.HorizontalOrigin.CENTER,
+      verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+      scaleByDistance:true
+      // 高亮时的样式
+      // highlight: {
+      //   type: mars3d.EventType.click,
+      //   className: "marsGreenGradientPnl-highlight"
+      // }
+    },
+    attr: { remark: "示例3" }
+  })
+  //graphicLayer.addGraphic(graphic)
+  graphic.addTo(graphicLayer)
+  // 在指定时间范围显示对象 0-10，20-30,40-max
+  const now = map.clock.currentTime
+  graphic.availability = [
+    { start: now, stop: Cesium.JulianDate.addSeconds(now, 10, new Cesium.JulianDate()) },
+    { start: Cesium.JulianDate.addSeconds(now, 20, new Cesium.JulianDate()), stop: Cesium.JulianDate.addSeconds(now, 30, new Cesium.JulianDate()) },
+    { start: Cesium.JulianDate.addSeconds(now, 40, new Cesium.JulianDate()), stop: "2999-01-01 00:00:00" }
+  ]
+}
+
 
 function removeLayer() {
   if (graphicLayer) {
@@ -50,49 +128,49 @@ function removeLayer() {
 /**
  * 平台通过draw标绘后保存的geojosn数据（已经内置style了，无需配置symbol）
  */
-function showDraw(isFlyTo) {
-  removeLayer()
+// function showDraw(isFlyTo) {
+//   removeLayer()
 
-  graphicLayer = new mars3d.layer.GeoJsonLayer({
-    name: "标绘示例数据",
-    url: "//data.mars3d.cn/file/geojson/mars3d-draw.json",
-    popup: "{type} {name}",
-    queryParameters: {
-      token: "mars3d" // 可以传自定义url参数，如token等
-    },
-    symbol: {
-      merge: true,
-      styleOptions: {
-        // 高亮时的样式
-        highlight: {
-          type: "click",
-          opacity: 0.9
-        }
-      }
-    },
-    flyTo: isFlyTo
-  })
-  map.addLayer(graphicLayer)
+//   graphicLayer = new mars3d.layer.GeoJsonLayer({
+//     name: "标绘示例数据",
+//     url: "//data.mars3d.cn/file/geojson/mars3d-draw.json",
+//     popup: "{type} {name}",
+//     queryParameters: {
+//       token: "mars3d" // 可以传自定义url参数，如token等
+//     },
+//     symbol: {
+//       merge: true,
+//       styleOptions: {
+//         // 高亮时的样式
+//         highlight: {
+//           type: "click",
+//           opacity: 0.9
+//         }
+//       }
+//     },
+//     flyTo: isFlyTo
+//   })
+//   map.addLayer(graphicLayer)
 
-  // load事件,必须在load完成前绑定才能监听
-  graphicLayer.on(mars3d.EventType.load, function (event) {
-    if (event.layer) {
-      console.log("数据加载完成", event)
-    }
-  })
+//   // load事件,必须在load完成前绑定才能监听
+//   graphicLayer.on(mars3d.EventType.load, function (event) {
+//     if (event.layer) {
+//       console.log("数据加载完成", event)
+//     }
+//   })
 
-  setTimeout(() => {
-    // readyPromise是可以load加载数据完成后去获取
-    graphicLayer.readyPromise.then(function (layer) {
-      console.log("readyPromise:数据加载完成", layer)
-    })
-  }, 5000)
+//   setTimeout(() => {
+//     // readyPromise是可以load加载数据完成后去获取
+//     graphicLayer.readyPromise.then(function (layer) {
+//       console.log("readyPromise:数据加载完成", layer)
+//     })
+//   }, 5000)
 
-  // 单击事件
-  graphicLayer.on(mars3d.EventType.click, function (event) {
-    console.log("单击了图层", event)
-  })
-}
+//   // 单击事件
+//   graphicLayer.on(mars3d.EventType.click, function (event) {
+//     console.log("单击了图层", event)
+//   })
+// }
 
 /**
  * 点数据
@@ -109,7 +187,7 @@ function showPoint() {
     url: "//data.mars3d.cn/file/geojson/hfty-point.json",
     symbol: {
       styleOptions: {
-        image: "img/marker/mark-red.png",
+        image: "../img/marker/mark-red.png",
         verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
         scale: 1,
         scaleByDistance: true,
@@ -184,8 +262,8 @@ function showChinaLine() {
 
   graphicLayer = new mars3d.layer.GeoJsonLayer({
     name: "全国省界",
-    //url: "//data.mars3d.cn/file/geojson/areas/100000_full.json",
-    url: "./json/hefei_line_FeaturesToJSO.json",
+    url: "//data.mars3d.cn/file/geojson/areas/100000_full.json",
+    //url: "./json/ceshi_FeaturesToJSON.json",
     format: simplifyGeoJSON, // 用于自定义处理geojson
     symbol: {
       type: "polylineP",
@@ -197,6 +275,11 @@ function showChinaLine() {
           image: "img/textures/fence-line.png",
           speed: 10,
           repeat_x: 10
+          // image: "../img/textures/line-arrow-blue.png",
+          // color: "#1a9850",
+          // mixt: true,
+          // speed: 20,
+          // repeat: new Cesium.Cartesian2(5, 1)
         },
         distanceDisplayCondition: true,
         distanceDisplayCondition_far: 12000000,
@@ -646,4 +729,102 @@ function showGCJ02Data() {
     flyTo: true
   })
   map.addLayer(graphicLayer)
+}
+
+var my_switch = true;
+function LoadMounts(mount_type){
+  //removeLayer()
+  graphicLayer.clear()
+  if(my_switch==true){
+      $.ajax({
+          url: 'http://localhost:5500/search_mounts',
+          type: 'get',
+          dataType: 'json',
+          data: {//传进去的
+              type:mount_type
+          }, // Pass the parameter here
+          success: function (data) {//返回结果在data里 数据返回成功之后要干什么
+            $.each(data, function (index, item) {
+              addDemoGraphic(graphicLayer,item)
+            });
+
+          }
+      }); 
+  }else{
+      tbodydata ='';
+      $.get('../json/课程.json',{},function(data){
+          creatTable(data);
+          console.log(data[0]["课程名"]);
+          function creatTable(data){
+           //这个函数的参数data是字符串数组，可以是从后台传过来的也可以是从其他任何地方传过来的
+          tbodydata = "<div class='box_contain'>";
+          for (var i=0;i<8;i++) {	
+              tbodydata +="<div class='pic_box'>"+"<img src='../MiaoXiu_Image/"+data[i]["课程ID"]+".jpg' alt='"+data[i]["课程ID"]+".jpg' onclick='show_product("+data[i]["课程ID"]+",1)'>"+
+                "<div class = 'name_img'><p>"+data[i]["课程名"]+"</p>"+
+                 	"<img src='../imgs/购物车.png' class='add-to-cart' alt='Image' item_id='"+data[i]["objectid"]+"' onclick='add_product("+data[i]["课程ID"]+",1)'></div></div>";
+                if(i == 3){
+                  tbodydata+="</div>";
+                  tbodydata+="<div class='box_contain'>";
+              }
+              if(i == 7){
+                  tbodydata+="</div>";
+              }
+          }
+            //现在tableData已经生成好了，把他赋值给上面的tbody
+            $("#type4").html(tbodydata);
+          }		
+      });
+  }
+}
+
+
+// function MountData(data){
+//   console.log(333);
+//   var tbodydata = '';
+//   //tbodydata = "<div class='box_contain'>";
+//   $.each(data, function (index, item) {
+//       // tbodydata +="<div class='pic_box'>"+"<img src='../MiaoXiu_Image/"+item.课程id+".jpg' alt='"+item.课程id+".jpg' onclick='show_product("+item.课程id+",1)'>"+
+//       // "<div class = 'name_img'><p>"+item.课程名+"</p>"+
+//       // "<img src='../imgs/购物车.png' class='add-to-cart' alt='Image' item_id='"+item.objectid+"' onclick='add_product("+item.课程id+",1)'></div></div>";
+//       // if(index == 3){
+//       //     tbodydata+="</div>";
+//       //     tbodydata+="<div class='box_contain'>";
+//       // }
+//       // if(index == 7){
+//       //     tbodydata+="</div>";
+//       // }
+
+//   });
+//   return tbodydata;
+// }
+// function MountData(){
+// }
+
+
+ 
+
+
+function addDemoGraphic(graphicLayer,item){
+    var name;
+    name = item.名字;
+    const graphic = new mars3d.graphic.DivGraphic({
+    position: [item.经度, item.纬度],
+    style: {
+      html: `<div class="marsBlackPanel  animation-spaceInDown">
+              <div class="marsBlackPanel-text">` + name +`</div>
+          </div>`,
+      horizontalOrigin: Cesium.HorizontalOrigin.LEFT,
+      verticalOrigin: Cesium.VerticalOrigin.CENTER,
+      //distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 400000), // 按视距距离显示
+      clampToGround: true,
+      // 高亮时的样式
+      highlight: {
+        // type: mars3d.EventType.click,
+        className: "marsBlackPanel-highlight"
+      }
+    },
+    attr: { remark: "示例1" }
+  })
+  //graphicLayer.addGraphic(graphic)
+  graphic.addTo(graphicLayer)
 }
