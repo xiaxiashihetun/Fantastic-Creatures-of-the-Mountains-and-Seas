@@ -25,10 +25,27 @@ app.get('/search_mounts', function (req, res, next) {
         }
         // res.status(200).send(result.rows); 
         // 将查询结果存储在变量中
-        const xiupinData = result.rows;
+        const mountData = result.rows;
+        //console.log("yes");
+        // 以 JSON 格式返回数据给前端
+        res.status(200).json(mountData);
+    });
+});
+
+app.get('/search_mountinfo', function (req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin','*');
+    var type=req.query.type;
+    client.query('SELECT * FROM 东山一经 where id  = $1;', [type], function (err, result) {      
+        if (err) {
+            console.log(err);
+            return res.status(400).send(err);
+        }
+        // res.status(200).send(result.rows); 
+        // 将查询结果存储在变量中
+        const mountData = result.rows;
         console.log("yes");
         // 以 JSON 格式返回数据给前端
-        res.status(200).json(xiupinData);
+        res.status(200).json(mountData);
     });
 });
 

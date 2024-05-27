@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Toggle Div with jQuery</title>
+<!-- 引入 jQuery 库 -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<style>
+    /* CSS 样式 */
+    .scrollable-div {
+        width: 400px; /* 指定宽度 */
+        height: 300px; /* 指定高度 */
+        background-color: lightgray; /* 指定背景颜色 */
+        overflow-y: auto; /* 当内容超出高度时显示垂直滚动条 */
+        padding: 10px; /* 设置内边距 */
+        /* display: none; 默认隐藏 */
+    }
+</style>
+</head>
+<body>
+
+<!-- HTML 结构 -->
+<button id="showDivBtn">显示</button>
+<button id="hideDivBtn">隐藏</button>
+<div class="scrollable-div">
+    <!-- 这里放置要显示的大段文字 -->
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor.</p>
+    <p>...</p>
+    <!-- 这里放置更多的文本内容 -->
+</div>
+
+<script>
+    // 当页面加载完成后执行
+    $(document).ready(function(){
+        // 显示按钮点击事件
+        $("#showDivBtn").click(function(){
+            $(".scrollable-div").show(); // 显示 div
+        });
+        
+        // 隐藏按钮点击事件
+        $("#hideDivBtn").click(function(){
+            $(".scrollable-div").hide(); // 隐藏 div
+        });
+    });
+</script>
+
+</body>
+</html>

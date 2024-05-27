@@ -1,0 +1,17 @@
+.my_infoview {
+    position: absolute;
+    width: 40%; /* 指定宽度 */
+    height: 100%; /* 指定高度 */
+    top: 10px;
+    right: 10px;
+    bottom: 30px;
+    padding: 10px 15px;
+    border-radius: 4px;
+    border: 1px solid rgba(128, 128, 128, 0.5);
+    color: #ffffff;
+    background: #BF883F;
+    box-shadow: 0 3px 14px rgba(128, 128, 128, 0.5);
+    z-index: 19870101;
+    overflow-y: auto; /* 当内容超出高度时显示垂直滚动条 */
+    display: none; 
+  }

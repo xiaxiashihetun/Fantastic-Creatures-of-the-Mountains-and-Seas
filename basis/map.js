@@ -1,7 +1,8 @@
 // import * as mars3d from "mars3d"
 
 var map // mars3d.Map三维地图对象
-var graphicLayer // 矢量图层对象
+var graphicLayer // 矢量图层对象,放置山的点位
+var graphicLayer_info //div图层对象，放置山的介绍div
 var eventTarget = new mars3d.BaseClass() // 事件对象，用于抛出事件到面板中
 
 // 需要覆盖config.json中地图属性参数（当前示例框架中自动处理合并）
@@ -37,6 +38,14 @@ function onMounted(mapInstance) {
   graphicLayer = new mars3d.layer.GraphicLayer()
   map.addLayer(graphicLayer)
 
+  graphicLayer_info = new mars3d.layer.GraphicLayer()
+  map.addLayer(graphicLayer_info)
+
+  graphicLayer_info.on(mars3d.EventType.click, function (event) {
+    // event.stopPropagation()
+    console.log("监听layer，单击了info对象", event)
+  })
+
   // 在layer上绑定监听事件
   graphicLayer.on(mars3d.EventType.click, function (event) {
     // event.stopPropagation()
@@ -44,8 +53,8 @@ function onMounted(mapInstance) {
   })
   //showDraw()
 
-  addDemoGraphic1(graphicLayer)
-  addDemoGraphic3(graphicLayer)
+  //addDemoGraphic1(graphicLayer)
+  //addDemoGraphic3(graphicLayer)
 }
 
 /**
@@ -81,7 +90,7 @@ function addDemoGraphic1(graphicLayer) {
     attr: { remark: "示例1" }
   })
   //graphicLayer.addGraphic(graphic)
-  graphic.addTo(graphicLayer)
+  graphic.addTo(graphicLayer_info)
 }
 
 
@@ -778,29 +787,6 @@ function LoadMounts(mount_type){
 }
 
 
-// function MountData(data){
-//   console.log(333);
-//   var tbodydata = '';
-//   //tbodydata = "<div class='box_contain'>";
-//   $.each(data, function (index, item) {
-//       // tbodydata +="<div class='pic_box'>"+"<img src='../MiaoXiu_Image/"+item.课程id+".jpg' alt='"+item.课程id+".jpg' onclick='show_product("+item.课程id+",1)'>"+
-//       // "<div class = 'name_img'><p>"+item.课程名+"</p>"+
-//       // "<img src='../imgs/购物车.png' class='add-to-cart' alt='Image' item_id='"+item.objectid+"' onclick='add_product("+item.课程id+",1)'></div></div>";
-//       // if(index == 3){
-//       //     tbodydata+="</div>";
-//       //     tbodydata+="<div class='box_contain'>";
-//       // }
-//       // if(index == 7){
-//       //     tbodydata+="</div>";
-//       // }
-
-//   });
-//   return tbodydata;
-// }
-// function MountData(){
-// }
-
-
  
 
 
@@ -810,9 +796,16 @@ function addDemoGraphic(graphicLayer,item){
     const graphic = new mars3d.graphic.DivGraphic({
     position: [item.经度, item.纬度],
     style: {
+      // html: `<div class="marsBlackPanel  animation-spaceInDown">
+      //         <div class="marsBlackPanel-text" onclick="Move2Mount(`+ item.经度+`,`+ item.纬度 + `)">` 
+      //         + name +
+      //         `</div>
+      //       </div>`,
       html: `<div class="marsBlackPanel  animation-spaceInDown">
-              <div class="marsBlackPanel-text">` + name +`</div>
-          </div>`,
+              <div class="marsBlackPanel-text" onclick="ShowInfo(`+ item.id + `);Move2Mount(`+item.经度+`,`+ item.纬度+`)">` 
+              + name +
+              `</div>
+            </div>`,
       horizontalOrigin: Cesium.HorizontalOrigin.LEFT,
       verticalOrigin: Cesium.VerticalOrigin.CENTER,
       //distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 400000), // 按视距距离显示
@@ -828,3 +821,150 @@ function addDemoGraphic(graphicLayer,item){
   //graphicLayer.addGraphic(graphic)
   graphic.addTo(graphicLayer)
 }
+
+function Move2Mount(lng,lat){
+  d_lat = -1.7;
+  d_lng = 0.7;
+  map.setCameraView({ lat: lat+d_lat, lng: lng+d_lng, alt: 50000, heading: 0, pitch: -10 })
+}
+
+function ShowInfo(id){
+  // d_lat = -1.7;
+  // d_lng = 0.7;
+  // map.setCameraView({ lat: lat+d_lat, lng: lng+d_lng, alt: 50000, heading: 0, pitch: -10 })
+  if(my_switch==true){
+      $.ajax({
+          url: 'http://localhost:5500/search_mountinfo',
+          type: 'get',
+          dataType: 'json',
+          data: {//传进去的
+              type:id
+          }, // Pass the parameter here
+          success: function (data) {//返回结果在data里 数据返回成功之后要干什么
+            $.each(data, function (index, item) {
+               //console.log(item.名字);
+              //  d_lat = -1.7;
+              //  d_lng = 0.7;
+              //  map.setCameraView({ lat: item.纬度+d_lat, lng: item.经度+d_lng, alt: 50000, heading: 0, pitch: -10 })
+               addInfo(item)
+            });
+
+          }
+      }); 
+  }else{
+      tbodydata ='';
+      $.get('../json/课程.json',{},function(data){
+          creatTable(data);
+          console.log(data[0]["课程名"]);
+          function creatTable(data){
+           //这个函数的参数data是字符串数组，可以是从后台传过来的也可以是从其他任何地方传过来的
+          tbodydata = "<div class='box_contain'>";
+          for (var i=0;i<8;i++) {	
+              tbodydata +="<div class='pic_box'>"+"<img src='../MiaoXiu_Image/"+data[i]["课程ID"]+".jpg' alt='"+data[i]["课程ID"]+".jpg' onclick='show_product("+data[i]["课程ID"]+",1)'>"+
+                "<div class = 'name_img'><p>"+data[i]["课程名"]+"</p>"+
+                 	"<img src='../imgs/购物车.png' class='add-to-cart' alt='Image' item_id='"+data[i]["objectid"]+"' onclick='add_product("+data[i]["课程ID"]+",1)'></div></div>";
+                if(i == 3){
+                  tbodydata+="</div>";
+                  tbodydata+="<div class='box_contain'>";
+              }
+              if(i == 7){
+                  tbodydata+="</div>";
+              }
+          }
+            //现在tableData已经生成好了，把他赋值给上面的tbody
+            $("#type4").html(tbodydata);
+          }		
+      });
+  }
+}
+
+//把信息添加到div并显示
+function addInfo(info){
+  console.log("showshow");
+  var tbodydata = `<p>新的内容
+  相机对象,由三维地图内部创建的Camera (opens new window)类， 描述了相机的当前状态，包括：位置（position）,朝向（ orientation）, 参考空间（ reference frame）, 视锥体（view frustum）.
+
+一些最常用的方法如下：
+
+map.camera.setView(options) (opens new window): 在特定位置和方向立即设置相机。
+map.camera.zoomIn(amount) (opens new window): 沿着视角矢量移动摄像机。
+map.camera.zoomOut(amount) (opens new window): 沿视角矢量向后移动摄像机。
+map.camera.flyTo(options) (opens new window): 创建从当前相机位置到新位置的动画相机飞行。
+map.camera.lookAt(target, offset) (opens new window): 定位并定位摄像机以给定偏移量瞄准目标点。
+map.camera.move(direction, amount) (opens new window): 朝任何方向移动摄像机。
+map.camera.rotate(axis, angle) (opens new window): 绕任意轴旋转相机。
+使用setView函数设置Camera的位置和方向。destination可以是Cartesian3或Rectangle，orientation可以是heading/pitch/roll或direction/up。 heading航向角、pitch俯仰角和roll横滚角以弧度定义。
+
+heading航向角：是从正角度向东增加的局部北向旋转。
+pitch俯仰角：是指从局部的东北平面开始的旋转。正俯仰角在平面上方。负俯仰角在平面以下。
+roll横滚角：是围绕局部东轴应用的第一个旋转。
+相机对象,由三维地图内部创建的Camera (opens new window)类， 描述了相机的当前状态，包括：位置（position）,朝向（ orientation）, 参考空间（ reference frame）, 视锥体（view frustum）.
+
+一些最常用的方法如下：
+
+map.camera.setView(options) (opens new window): 在特定位置和方向立即设置相机。
+map.camera.zoomIn(amount) (opens new window): 沿着视角矢量移动摄像机。
+map.camera.zoomOut(amount) (opens new window): 沿视角矢量向后移动摄像机。
+map.camera.flyTo(options) (opens new window): 创建从当前相机位置到新位置的动画相机飞行。
+map.camera.lookAt(target, offset) (opens new window): 定位并定位摄像机以给定偏移量瞄准目标点。
+map.camera.move(direction, amount) (opens new window): 朝任何方向移动摄像机。
+map.camera.rotate(axis, angle) (opens new window): 绕任意轴旋转相机。
+使用setView函数设置Camera的位置和方向。destination可以是Cartesian3或Rectangle，orientation可以是heading/pitch/roll或direction/up。 heading航向角、pitch俯仰角和roll横滚角以弧度定义。
+
+heading航向角：是从正角度向东增加的局部北向旋转。
+pitch俯仰角：是指从局部的东北平面开始的旋转。正俯仰角在平面上方。负俯仰角在平面以下。
+roll横滚角：是围绕局部东轴应用的第一个旋转。
+相机对象,由三维地图内部创建的Camera (opens new window)类， 描述了相机的当前状态，包括：位置（position）,朝向（ orientation）, 参考空间（ reference frame）, 视锥体（view frustum）.
+
+一些最常用的方法如下：
+
+map.camera.setView(options) (opens new window): 在特定位置和方向立即设置相机。
+map.camera.zoomIn(amount) (opens new window): 沿着视角矢量移动摄像机。
+map.camera.zoomOut(amount) (opens new window): 沿视角矢量向后移动摄像机。
+map.camera.flyTo(options) (opens new window): 创建从当前相机位置到新位置的动画相机飞行。
+map.camera.lookAt(target, offset) (opens new window): 定位并定位摄像机以给定偏移量瞄准目标点。
+map.camera.move(direction, amount) (opens new window): 朝任何方向移动摄像机。
+map.camera.rotate(axis, angle) (opens new window): 绕任意轴旋转相机。
+使用setView函数设置Camera的位置和方向。destination可以是Cartesian3或Rectangle，orientation可以是heading/pitch/roll或direction/up。 heading航向角、pitch俯仰角和roll横滚角以弧度定义。
+
+heading航向角：是从正角度向东增加的局部北向旋转。
+pitch俯仰角：是指从局部的东北平面开始的旋转。正俯仰角在平面上方。负俯仰角在平面以下。
+roll横滚角：是围绕局部东轴应用的第一个旋转。
+相机对象,由三维地图内部创建的Camera (opens new window)类， 描述了相机的当前状态，包括：位置（position）,朝向（ orientation）, 参考空间（ reference frame）, 视锥体（view frustum）.
+
+一些最常用的方法如下：
+
+map.camera.setView(options) (opens new window): 在特定位置和方向立即设置相机。
+map.camera.zoomIn(amount) (opens new window): 沿着视角矢量移动摄像机。
+map.camera.zoomOut(amount) (opens new window): 沿视角矢量向后移动摄像机。
+map.camera.flyTo(options) (opens new window): 创建从当前相机位置到新位置的动画相机飞行。
+map.camera.lookAt(target, offset) (opens new window): 定位并定位摄像机以给定偏移量瞄准目标点。
+map.camera.move(direction, amount) (opens new window): 朝任何方向移动摄像机。
+map.camera.rotate(axis, angle) (opens new window): 绕任意轴旋转相机。
+使用setView函数设置Camera的位置和方向。destination可以是Cartesian3或Rectangle，orientation可以是heading/pitch/roll或direction/up。 heading航向角、pitch俯仰角和roll横滚角以弧度定义。
+
+heading航向角：是从正角度向东增加的局部北向旋转。
+pitch俯仰角：是指从局部的东北平面开始的旋转。正俯仰角在平面上方。负俯仰角在平面以下。
+roll横滚角：是围绕局部东轴应用的第一个旋转。
+  </p>
+  <button onclick='hideinfo()'>隐藏内容</button>`;
+  // 隐藏 id 为 "info" 的 div，并设置新的 HTML 内容
+  $("#info").hide().html(tbodydata);
+
+  // 使用 slideDown() 方法以动画效果向左滑动显示内容
+  $("#info").slideDown("slow");
+  
+        // 替换 id 为 "info" 的 div 的内容
+  // $("#info").html(tbodydata);
+  // $(".my_infoview").show(); // 显示 div
+  //graphicLayer.addGraphic(graphic)
+  //graphic.addTo(graphicLayer_info)
+}
+
+function hideinfo(){
+  $("#info").slideUp("slow");
+}
+$("#hideInfoBtn").click(function() {
+  // 隐藏 id 为 "info" 的 div
+  $("#info").slideUp("slow");
+});
