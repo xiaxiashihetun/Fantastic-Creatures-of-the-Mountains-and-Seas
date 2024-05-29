@@ -1,17 +1,195 @@
 .my_infoview {
     position: absolute;
-    width: 40%; /* 指定宽度 */
-    height: 100%; /* 指定高度 */
+    width: 60%; /* 指定宽度 */
+    height: 95%; /* 指定高度 */
     top: 10px;
     right: 10px;
-    bottom: 30px;
-    padding: 10px 15px;
+    margin-bottom: 3%;
+    padding: 2% 4%;
     border-radius: 4px;
     border: 1px solid rgba(128, 128, 128, 0.5);
-    color: #ffffff;
-    background: #BF883F;
+    background: #AF9267 ;
     box-shadow: 0 3px 14px rgba(128, 128, 128, 0.5);
     z-index: 19870101;
     overflow-y: auto; /* 当内容超出高度时显示垂直滚动条 */
     display: none; 
+    color: #333;
   }
+.info_title{
+    font-family: STKaiti; /* 字体 */
+    color: #333; /* 文字颜色 */
+    font-size: 425%; /* 字体大小 */
+}
+
+.info_text{
+    font-family: STKaiti; /* 字体 */
+    color: #333; /* 文字颜色 */
+    font-size: 200%; /* 字体大小 */
+}
+
+.main_text {
+    width: 100%; /* 子元素宽度为父元素宽度的一半 */
+    height: 100%; /* 子元素高度为父元素高度的一半 */
+    margin-top: 10%;
+    border: 2px solid #ccc; /* 子元素边界颜色为灰色 */
+    box-sizing: border-box; /* 让边界宽度包含在元素宽度内 */
+}
+
+.main_text h2 {
+    font-family: STXingkai; /* 字体 */
+    color: #333; /* 文字颜色 */
+    font-size: 250%; /* 字体大小 */
+    display: flex; /* 使用 Flexbox 布局 */
+    align-items: center; /* 垂直居中对齐 */
+    clear:both;
+}
+
+.main_text h2::after {
+    content: ""; /* 设置伪元素的内容为空 */
+    flex: 0 1 50%;
+    height: 1px; /* 设置横线的高度 */
+    background-color: #EBCFA7; /* 设置横线的颜色为白色 */
+    margin-left: 10px; /* 设置横线与标题之间的间距 */
+}
+
+.box_contain{
+    margin: auto 0;
+    /* display: flex; */
+    /* border: 1px solid #999; */
+}
+  
+.pic_box{
+    /* flex: 1; */
+    float:left;
+    width: 25%;
+    /* height:230px; */
+    margin: 1%;
+    border: 1px solid #999;
+    padding: 1%;
+    transition: transform 0.5s;
+    cursor: pointer;
+    text-align: center;
+    font-size: 200%;
+}
+  
+.pic_box:hover{
+    transform: translateY(3px);
+    box-shadow:0 8px 16px 0 rgba(36, 122, 164, 0.2);
+}
+  
+.pic_box img{
+    height:75%;
+    width:100%;
+}
+  
+.pic_box p{
+    font-family: STKaiti;
+    font-weight: 100;
+    display: inline;
+    color: #333; 
+}
+
+.ys_p{
+    font-family: STKaiti; /* 字体 */
+    color: #333; /* 文字颜色 */
+    font-size: 200%; /* 字体大小 */
+}
+.jieshao{
+    margin-top: 10%;
+    width:100%;
+    height:80%;
+    display: none; 
+    clear:both;
+    font-family:华文行楷;
+    border: 1px solid #999;
+    padding: 2%;
+    box-sizing: border-box;/*加上这一句 宽度不会超过父元素*/
+}
+.jieshao h1{
+    font-family: STKaiti;
+    font-size: 300%;
+    font-weight: 100;
+    color: #333;
+}
+.jieshao table{
+    border-collapse: collapse; /* 合并边框 */
+    border-color: transparent; /* 边框颜色透明 */
+    width: 80%;
+    margin: 0 auto; /* 水平居中 */
+    color: #333;
+    table-layout: fixed;
+}
+.jieshao h3{
+    font-size: 180%;
+}
+.jieshao p{
+    font-family: STKaiti;
+    font-size: 150%;
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    border: 1px solid #999;
+  }
+  /* 设置图片的大小 */
+  .container .image {
+    width: 3%; /* 根据需要调整图片宽度 */
+    height: auto;
+    margin-right: 1%; /* 图片与文字之间的间距 */
+  }
+  /* 设置文字样式 */
+  .container .text {
+    cursor: pointer;
+    font-size: 200%; /* 根据需要调整文字大小 */
+    margin-top: 10px;
+  }
+
+  .container .cursor {
+    width: 6%; /* 根据需要调整图片宽度 */
+    height: auto;
+    margin-right: 1%; /* 图片与文字之间的间距 */
+    cursor: pointer;
+  }
+
+  .tooltip {
+    position: absolute;
+    background-color: #333;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    display: none;
+  }
+
+  .map_box{
+    margin-top: 1%;
+    width:40%;
+    height:300px;
+    border: 1px solid #999;
+  }
+  .text_box{
+    border: 1px solid #999;
+    width:60%;
+  }
+
+
+.shouqi{
+    width: 5%; /* 根据需要调整图片宽度 */
+    height: auto;
+    margin-right: 1%; /* 图片与文字之间的间距 */
+}
+  
+.sq_text{
+    cursor: pointer;
+    font-size: 200%;
+    cursor: pointer; 
+    font-family: STKaiti;
+    margin-top: 10px;
+}
+
+.shunxu{
+    font-family:华文楷体;
+    margin-left: 2%;
+    margin-top: 3%;
+    font-size: 200%;
+}

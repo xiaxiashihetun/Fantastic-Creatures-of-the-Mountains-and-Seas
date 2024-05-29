@@ -1,0 +1,60 @@
+body {  
+    /* 设置背景图片 */  
+    background-image: url('../img/home/系统主页背景.png'); /* 替换为您的背景图片路径 */  
+      
+    /* 其他背景属性 */  
+    background-repeat: no-repeat; /* 不重复背景图片 */  
+    background-size: cover; /* 缩放背景图片以完全覆盖内容区域 */  
+    background-position: center center; /* 将背景图片定位在中心 */  
+      
+    /* 可选：设置背景颜色作为备用或图片加载失败时的颜色 */  
+    background-color: #f0f0f0;  
+      
+    /* 其他样式 */  
+    margin: 0; /* 移除默认边距 */  
+    padding: 0; /* 移除默认内边距 */  
+    font-family: Arial, sans-serif; /* 设置字体 */  
+}  
+  
+html, body {  
+    height: 100%;  
+    margin: 0;  
+    padding: 0;  
+}  
+
+.image1 {  
+    position: absolute;  
+    top: 70%;  
+    left: 42%;  
+    transform: translate(-50%, -50%);  
+} 
+.image2 {  
+    position: absolute;  
+    top: 75%;  
+    left: 57%;  
+    transform: translate(-50%, -50%);  
+} 
+.image3 {  
+    position: absolute;  
+    top: 60%;  
+    left: 72%;  
+    transform: translate(-50%, -50%);  
+} 
+.image4 {  
+    position: absolute;  
+    top: 62%;  
+    left: 87%;  
+    transform: translate(-50%, -50%);  
+} 
+.image5 {  
+    position: absolute;  
+    top: 5%;  
+    left: 95%;  
+    transform: translate(-50%, -50%);  
+} 
+.image6 {  
+    position: absolute;  
+    top: 35%;  
+    left: 65%;  
+    transform: translate(-50%, -50%);  
+} 

@@ -14,111 +14,25 @@ app.set('port', process.env.PORT || 5500);
 
 
 
+
 //查询语句  翻页查询
 app.get('/search_mounts', function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin','*');
     var type=req.query.type;
-    client.query('SELECT * FROM 全部山 where 所属山系  = $1;', [type], function (err, result) {      
+    client.query('SELECT * FROM 东山一经 where 所属山系  = $1;', [type], function (err, result) {      
         if (err) {
             console.log(err);
             return res.status(400).send(err);
         }
         // res.status(200).send(result.rows); 
         // 将查询结果存储在变量中
-        const mountData = result.rows;
-        //console.log("yes");
-        // 以 JSON 格式返回数据给前端
-        res.status(200).json(mountData);
-    });
-});
-
-app.get('/search_mountinfo', function (req, res, next) {
-    res.setHeader('Access-Control-Allow-Origin','*');
-    var type=req.query.type;
-    client.query('SELECT * FROM 全部山 where id  = $1;', [type], function (err, result) {      
-        if (err) {
-            console.log(err);
-            return res.status(400).send(err);
-        }
-        // res.status(200).send(result.rows); 
-        // 将查询结果存储在变量中
-        const mountData = result.rows;
+        const xiupinData = result.rows;
         console.log("yes");
         // 以 JSON 格式返回数据给前端
-        res.status(200).json(mountData);
+        res.status(200).json(xiupinData);
     });
 });
 
-app.get('/search_YS', function (req, res, next) {
-    res.setHeader('Access-Control-Allow-Origin','*');
-    var type=req.query.type;
-    client.query('SELECT * FROM 全部兽 where mountid  = $1;', [type], function (err, result) {      
-        if (err) {
-            console.log(err);
-            return res.status(400).send(err);
-        }
-        // res.status(200).send(result.rows); 
-        // 将查询结果存储在变量中
-        const mountData = result.rows;
-        
-        // 以 JSON 格式返回数据给前端
-        res.status(200).json(mountData);
-    });
-});
-
-app.get('/search_animal', function (req, res, next) {
-    res.setHeader('Access-Control-Allow-Origin','*');
-    var type=req.query.type;
-    console.log(type);
-    client.query('SELECT * FROM 全部兽 where id  = $1;', [type], function (err, result) {      
-        if (err) {
-            console.log(err);
-            return res.status(400).send(err);
-        }
-        // res.status(200).send(result.rows); 
-        // 将查询结果存储在变量中
-        const mountData = result.rows;
-        
-        // 以 JSON 格式返回数据给前端
-        res.status(200).json(mountData);
-    });
-});
-
-//查询某个顺序的山
-app.get('/search_mount', function (req, res, next) {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    var order = req.query.shunxu; 
-    var mountainRange = req.query.shanxi; // 所属山系为东山一经
-    client.query('SELECT * FROM "全部山" WHERE "顺序" = $1 AND "所属山系" = $2;', [order, mountainRange], function (err, result) {      
-        if (err) {
-            console.log(err);
-            return res.status(400).send(err);
-        }
-        // 将查询结果存储在变量中
-        const mountData = result.rows;
-        console.log("yes");
-        // 以 JSON 格式返回数据给前端
-        res.status(200).json(mountData);
-    });
-});
-
-app.get('/get_mountains', function (req, res,next) {
-    res.setHeader('Access-Control-Allow-Origin','*');
-    var name=req.query.name;
-    console.log(name)
-
-    client.query('SELECT * FROM 全部山 where 名字 = $1;', [name],function (err, result) {      
-        if (err) {
-            console.log(err);
-            return res.status(400).send(err);
-        }
-        // res.status(200).send(result.rows); 
-        // 将查询结果存储在变量中
-        const item_Data = result.rows;
-        // 以 JSON 格式返回数据给前端
-        res.status(200).json(item_Data);
-    });
-});
 
 //查询语句 单个商品信息查询
 app.get('/search_id', function (req, res, next) {
@@ -301,6 +215,25 @@ app.get('/list3', function(req, res) {
 //         }
 //     );
 // });
+
+
+app.get('/get_mountains', function (req, res,next) {
+    res.setHeader('Access-Control-Allow-Origin','*');
+    var name=req.query.name;
+    console.log(name)
+    const namem = '%${name}%'
+    client.query('SELECT * FROM 东山一经 where 名字 LIKE $1;', [namem],function (err, result) {      
+        if (err) {
+            console.log(err);
+            return res.status(400).send(err);
+        }
+        // res.status(200).send(result.rows); 
+        // 将查询结果存储在变量中
+        const item_Data = result.rows;
+        // 以 JSON 格式返回数据给前端
+        res.status(200).json(item_Data);
+    });
+});
 
 
 

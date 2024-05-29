@@ -1,33 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Toggle Div with jQuery</title>
-<!-- 引入 jQuery 库 -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<style>
-    /* CSS 样式 */
-    .scrollable-div {
-        width: 400px; /* 指定宽度 */
-        height: 300px; /* 指定高度 */
-        background-color: lightgray; /* 指定背景颜色 */
-        overflow-y: auto; /* 当内容超出高度时显示垂直滚动条 */
-        padding: 10px; /* 设置内边距 */
-        /* display: none; 默认隐藏 */
-    }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toggle Div with jQuery</title>
+    <!-- 引入 jQuery 库 -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://api.map.baidu.com/api?v=1.0&&type=webgl&ak=jNm72YWh13h7xrg1Lh4CdHyzXxd5FPTy">
+    </script>
+    <link href="../css/qly_style.css" rel="stylesheet" />
 </head>
 <body>
 
 <!-- HTML 结构 -->
 <button id="showDivBtn">显示</button>
 <button id="hideDivBtn">隐藏</button>
-<div class="scrollable-div">
-    <!-- 这里放置要显示的大段文字 -->
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor.</p>
-    <p>...</p>
-    <!-- 这里放置更多的文本内容 -->
+
+<div id="info" class="my_infoview">
+      <div class="container">
+        <h1 id = "Mount_name" class="info_title">舟山</h1>
+        <img src="./img/yishou/上一个.png" alt="Your Image" class="cursor" id="last">
+        <div class="tooltip" id="last_tip">上一座山</div>
+        <img src="./img/yishou/下一个.png" alt="Your Image" class="cursor" id="next">
+        <div class="tooltip" id="next_tip">下一座山</div>
+        
+      </div>
+      <p id = "Mount_class" class="info_text">——《东山一经》</p>
+      <div id = "main_text" class = "main_text">
+        <div class="part_of_main">   
+          <div class="container">
+            <div class="text_box">
+                <h2>位置</h2> 
+                <p id="position" class="info_text">在今山东济南附近</p>
+                <h2>特征</h2> 
+                <p id="feature" class="info_text">在今山东济南附近</p>
+            </div>
+            <div class="map_box" id="map" onclick="To_Map(1)">
+
+            </div>
+          </div>
+            <h2>奇珍异兽</h2> 
+                <div class='box_contain'>
+                    <div class='pic_box' onclick="show_yishou()">
+                        <img src='./img/yishou/鳙鳙鱼.jpg'>
+                        <p>鳙鳙鱼</p>
+                    </div>
+                    <div class='pic_box' onclick="div_yishou()">
+                        <img src='./img/yishou/鳙鳙鱼.jpg'>
+                        <p>鳙鳙鱼</p>
+                    </div>
+                    <div class='pic_box'>
+                        <img src='./img/yishou/鳙鳙鱼.jpg'>
+                        <p>鳙鳙鱼</p>
+                    </div>
+                </div>
+            <div id="yishou" class="jieshao">
+                <h1>鳙鳙鱼</h1>
+                <hr>
+                <table border="1">
+                    <tr>
+                      <td>
+                        <h3>活动范围</h3>
+                        <p id = "hdfw">你好</p>
+                      </td>
+                      <td>
+                        <h3>活动范围</h3>
+                        <p id = "shhj">你好</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <h3>活动范围</h3>
+                        <p>你好</p>
+                      </td>
+                      <td>
+                        <h3>活动范围</h3>
+                        <p>你好</p>
+                      </td>
+                    </tr>
+                  </table>
+                  <h3>原文</h3>
+                  <p>
+                    有兽焉，其状如马，一角有错，其名曰?疏，可以辟火
+                  </p>
+                  <h3>翻译</h3>
+                  <p>
+                    山中有一种野兽，形状似马，长着一只角，角上有磨刀石般坚硬的角质层，这种兽的名字叫?疏，人们可以用它来避火。
+                  </p>
+                <div class="container">
+                    <img src="./img/yishou/收起.png" alt="Your Image" class="image">
+                    <p class="text" onclick="hide_yishou()">收起</p>
+                </div>
+            </div>
+             
+            <h2>原文</h2> 
+            <p id="feature" class="info_text">鳙鳙鱼</p>
+            <h2>翻译</h2> 
+            <p id="feature" class="info_text">鳙鳙鱼</p>
+        </div> 
+        
+      </div>
 </div>
 
 <script>
@@ -35,14 +107,73 @@
     $(document).ready(function(){
         // 显示按钮点击事件
         $("#showDivBtn").click(function(){
-            $(".scrollable-div").show(); // 显示 div
+            $(".my_infoview").show(); // 显示 div
         });
         
         // 隐藏按钮点击事件
         $("#hideDivBtn").click(function(){
-            $(".scrollable-div").hide(); // 隐藏 div
+            $(".my_infoview").hide(); // 隐藏 div
         });
     });
+
+    function show_yishou(){
+        $(".jieshao").slideUp("slow");
+        $(".jieshao").slideDown("slow");
+    }
+
+    function hide_yishou(){
+        $(".jieshao").slideUp("slow");
+    }
+
+    function div_yishou(){
+        $("#hdfw").html("新的内容1");
+    }
+
+    // 获取图片元素和提示框元素
+  var image = document.getElementById("last");
+  var tooltip = document.getElementById("last_tip");
+  
+  // 当鼠标移入图片时显示提示框
+  image.addEventListener("mouseenter", function(event) {
+    // 设置提示框位置为鼠标位置
+    tooltip.style.left = (event.clientX - 500) + "px";
+    tooltip.style.top = (event.clientY - 5) + "px";
+    // 显示提示框
+    tooltip.style.display = "block";
+  });
+  
+  // 当鼠标移出图片时隐藏提示框
+  image.addEventListener("mouseleave", function() {
+    // 隐藏提示框
+    tooltip.style.display = "none";
+  });
+
+  // 获取图片元素和提示框元素
+  var image1 = document.getElementById("next");
+  var tooltip1 = document.getElementById("next_tip");
+  
+  // 当鼠标移入图片时显示提示框
+  image1.addEventListener("mouseenter", function(event) {
+    // 设置提示框位置为鼠标位置
+    tooltip1.style.left = (event.clientX - 450) + "px";
+    tooltip1.style.top = (event.clientY - 5) + "px";
+    // 显示提示框
+    tooltip1.style.display = "block";
+  });
+  
+  // 当鼠标移出图片时隐藏提示框
+  image1.addEventListener("mouseleave", function() {
+    // 隐藏提示框
+    tooltip1.style.display = "none";
+  });
+
+  var map = new BMapGL.Map("map");                // 创建地图实例
+  var point = new BMapGL.Point(130, 30); 
+  var marker = new BMapGL.Marker(point);        // 创建标注   
+map.addOverlay(marker);   
+map.centerAndZoom(point, 10);                      // 设置地图级别
+map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+console.log('地图完成');
 </script>
 
 </body>

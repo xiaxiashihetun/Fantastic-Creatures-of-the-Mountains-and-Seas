@@ -1,0 +1,166 @@
+
+
+  .image-container {  
+    position: relative;  
+    width: 50px; /* 设置你想要的宽度 */  
+    height: 100px; /* 设置你想要的高度 */  
+  }  
+    
+  .image-container img {  
+    width: 100%;  
+    height: 100%;  
+    display: block;  
+  }  
+    
+  .text-on-image {  
+    position: absolute;  
+    top: 50%; /* 根据需要调整垂直位置 */  
+    left: 50%; /* 根据需要调整水平位置 */  
+    transform: translate(-50%, -50%); /* 使文字在图片上居中 */  
+    color: rgb(255, 255, 255); /* 根据图片背景设置文字颜色 */  
+    font-size: 20px; /* 设置文字大小 */  
+    text-align: center; /* 如果文字内容较多，可以设置水平居中 */  
+  }
+
+
+  /* 图标容器的样式 */  
+  .svg-container {  
+    position: fixed; /* 固定在页面上 */  
+    top: 500px; /* 距离页面顶部的距离 */  
+    right: 100px; /* 距离页面右边的距离 */  
+    display: flex; /* 使用 Flexbox 布局 */  
+    flex-direction: column; /* 竖着排列子元素 */  
+    align-items: flex-start; /* 垂直对齐方式 */  
+    gap: 20px; /* 设置图标之间的间距 */    
+} 
+  /* 图标的样式 */  
+  .icon {  
+    cursor: pointer; /* 当鼠标悬停在图标上时显示点击手势 */  
+    /* 可以添加更多样式，如颜色、边框等 */  
+  } 
+
+  .huadong-container {  
+    position: fixed;  
+    top: 50%;  
+    right: 0;  
+    transform: translateY(-50%);  
+    display: flex;  
+    flex-direction: column;  
+    align-items: flex-start;  
+    padding: 10px;  
+    box-sizing: border-box;  
+    /* ... 其他样式 ... */  
+  }  
+    
+  .image-with-text {   
+    width: 30px; 
+    position: relative; /* 使子元素可以相对于这个元素定位 */    
+    display: flex; /* 使用Flexbox布局 */  
+    flex-direction: column; /* 子元素将垂直堆叠 */  
+    align-items: center; /* 垂直居中子元素 */  
+    justify-content: center; /* 水平居中子元素（如果有多行文本或水平元素）*/  
+    margin-bottom: 20px; /* 在图片之间添加间距 */    
+} 
+
+
+    
+  .image-with-text:last-child {  
+    margin-bottom: 0; /* 去除最后一个图片下方的间距 */  
+  }    
+    
+  .text-on-image {  
+    font-family: 华文楷体;
+    position: absolute; /* 绝对定位文本 */  
+    top: 50%; /* 垂直居中 */  
+    left: 50%; /* 水平居中 */  
+    transform: translate(-50%, -50%); /* 修正绝对定位导致的偏移 */  
+    color: white; /* 文本颜色 */  
+    font-size: 120%; /* 文本大小 */  
+    cursor: pointer; /* 鼠标悬停样式 */  
+    pointer-events: none; /* 如果图片有onclick事件，确保点击文本时不会触发两次事件 */  
+  }  
+    
+  /* 如果图片有onclick事件，并且你也希望文本可以点击，那么将pointer-events设为auto */  
+  /* .text-on-image { pointer-events: auto; } */  
+    
+  /* 如果图片和文本需要固定大小的间距，可以在这里添加内边距或外边距 */  
+  /* .text-on-image { padding: 5px; } 或者 .image-with-text img { padding: 5px; } */
+    
+  .image-with-text.active img {  
+    src:"../img/3d_point/滑动图标1.png";
+    width: 30px;
+    height: 30px;
+  }  
+    
+  .image-with-text.active .text-on-image {  
+    color: aliceblue;  
+  }  
+    
+  .image-with-text.inactive img {  
+    src:"../img/3d_point/滑动图标2.png";
+    width: 10px;
+    height: 10px;
+  }  
+    
+  .image-with-text.inactive .text-on-image {  
+    color: rgba(255, 255, 255, 0);
+  }
+
+  .search-form {  
+    position: fixed;  
+    top: 0;  
+    left: 0;  
+    width: 50px; /* 初始宽度 */  
+    height: 50px;  
+    overflow: hidden; /* 隐藏超出表单的内容 */  
+    transition: width 1s;  
+    z-index: 1000;  
+    cursor: pointer; /* 添加鼠标指针样式以表明可点击 */  
+}  
+  
+.search-form:hover {  
+    width: 200px; /* 悬停时展开的宽度 */  
+}  
+  
+.search-input {  
+    position: relative;  
+    height: 100%;  
+}  
+  
+.search-input input {  
+    position: absolute;  
+    top: 0;  
+    left: 0;  
+    width: calc(100% - 50px); /* 减去图标的宽度 */  
+    height: 100%;  
+    line-height: 50px; /* 与表单高度相同，垂直居中 */  
+    border: none;  
+    outline: none;  
+    padding: 0 10px; /* 内边距以适应图标 */  
+    border-radius: 4px 0 0 4px; /* 圆角以适应图标 */  
+    transition: opacity 1s; /* 透明度过渡，以平滑显示输入框 */  
+    opacity: 0; /* 初始时隐藏输入框 */  
+}  
+  
+.search-form:hover .search-input input {  
+    opacity: 1; /* 悬停时显示输入框 */  
+}  
+  
+.fa {  
+    position: absolute;  
+    top: 0;  
+    right: 0;  
+    width: 50px; /* 图标的宽度 */  
+    height: 100%;  
+    text-align: center;  
+    line-height: 50px; /* 垂直居中图标 */  
+    background-color: #fff; /* 可能与表单背景相同 */  
+    color: #07051a;  
+    border-radius: 0 4px 4px 0; /* 圆角以适应表单 */  
+    transition: background-color 1s;  
+}  
+  
+.search-form:hover .fa {  
+    background-color: #07051a;  
+    color: #fff;  
+}

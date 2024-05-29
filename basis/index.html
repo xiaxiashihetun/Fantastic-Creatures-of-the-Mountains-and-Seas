@@ -28,44 +28,141 @@
       include="jquery,layer,toastr,font-awesome,bootstrap,layer,haoutil,ztree,mars3d"
     ></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../js/load_imgs.js"></script>
+    <script src="https://api.map.baidu.com/api?v=1.0&&type=webgl&ak=jNm72YWh13h7xrg1Lh4CdHyzXxd5FPTy">
+    </script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
     <link href="../css/style.css" rel="stylesheet" />
     <link href="../css/divGraphic.css" rel="stylesheet" />
     <link href="../css/qly_style.css" rel="stylesheet" />
+    <link href="../css/yy.css" rel="stylesheet" />
 
   </head>
 
   <body class="dark">
     <div id="mars3dContainer" class="mars3d-container"></div>
-
-    <div id="viewSL" class="infoview">
-      <div class="f-mb f-pt">
-        示例:
-        <input type="button" class="btn btn-primary" value="省界线" onclick="showChinaLine()" />
-        <input type="button" class="btn btn-primary" value="东山一经" onclick="LoadMounts('东山一经')" />
-        <input type="button" class="btn btn-primary" value="标绘数据" onclick="showDraw(true)" />
-        <input type="button" class="btn btn-primary" value="单体化面" onclick="showMonomer()" />
-        <input type="button" class="btn btn-primary" value="世界各国" onclick="showWorld()" />
-        <input type="button" class="btn btn-primary" value="GCJ纠偏" onclick="showGCJ02Data()" />
-      </div>
-
-      <div class="f-mb f-pt loft-two">
-        <input type="button" class="btn btn-primary" value="体育设施点" onclick="showPoint()" />
-        <input type="button" class="btn btn-primary" value="合肥区域面" onclick="showRegion()" />
-        <input type="button" class="btn btn-primary" value="合肥边界墙" onclick="showBoundaryWall()" />
-        <input type="button" class="btn btn-primary" value="立体建筑物" onclick="showBuilding()" />
-        <input type="button" class="btn btn-primary" value="分层分户楼栋" onclick="showFloor()" />
-      </div>
-    </div>
+    <form id="searchForm" class="search-form">  
+      <div class="search-input">  
+          <input type="text" placeholder="Search..." id="searchTerm">  
+          <button type="submit"><i class="fa fa-search"></i></button>
+      </div>  
+    </form>
 
     <div id="info" class="my_infoview">
-      
+      <div class="container">
+        <img src="../img/yishou/收起.png" alt="Your Image" class="shouqi">
+        <p class="sq_text" id="hideInfoBtn">收起</p>
+      </div>
+      <div class="container">
+        <h1 id = "Mount_name" class="info_title">舟山</h1>
+        <img src="../img/yishou/上一个.png" alt="Your Image" class="cursor" id="last" onclick="change_mount(1)">
+        <div class="tooltip" id="last_tip">上一座山</div>
+        <img src="../img/yishou/下一个.png" alt="Your Image" class="cursor" id="next" onclick="change_mount(0)">
+        <div class="tooltip" id="last_tip">下一座山</div>
+        <p id="shunxu" class="shunxu">顺序介绍</p>
+      </div>
+      <p id = "Mount_class" class="info_text">——《东山一经》</p>
+      <div id = "main_text" class = "main_text">
+        <div class="part_of_main">   
+          <div class="container">
+            <div class="text_box">
+                <h2>位置</h2> 
+                <p id="position" class="info_text">在今山东济南附近</p>
+                <h2>特征</h2> 
+                <p id="feature" class="info_text">在今山东济南附近</p>
+            </div>
+            <div class="map_box" id="map">
+
+            </div>
+          </div>
+            
+            <h2>奇珍异兽</h2> 
+              <div id="yishoubox">
+                <div class='box_contain'>
+                    <div class='pic_box' onclick="show_yishou()">
+                        <img src='./img/yishou/鳙鳙鱼.jpg'>
+                        <p>鳙鳙鱼</p>
+                    </div>
+                    <div class='pic_box' onclick="div_yishou()">
+                        <img src='./img/yishou/鳙鳙鱼.jpg'>
+                        <p>鳙鳙鱼</p>
+                    </div>
+                    <div class='pic_box'>
+                        <img src='./img/yishou/鳙鳙鱼.jpg'>
+                        <p>鳙鳙鱼</p>
+                    </div>
+                </div>
+              </div>
+            <div id="yishou" class="jieshao">
+                <h1 id="ys_name">鳙鳙鱼</h1>
+                <hr>
+                <table border="1">
+                    <tr>
+                      <td>
+                        <h3>活动范围</h3>
+                        <p id = "hdfw">你好</p>
+                      </td>
+                      <td>
+                        <h3>生活环境</h3>
+                        <p id = "shhj">你好</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <h3>外形特征</h3>
+                        <p id = "wxtz">你好</p>
+                      </td>
+                      <td>
+                        <h3>功用</h3>
+                        <p id = "gy">你好</p>
+                      </td>
+                    </tr>
+                  </table>
+                  <h3>原文</h3>
+                  <p id="ys_yw">
+                    有兽焉，其状如马，一角有错，其名曰?疏，可以辟火
+                  </p>
+                  <h3>翻译</h3>
+                  <p id="ys_fy">
+                    山中有一种野兽，形状似马，长着一只角，角上有磨刀石般坚硬的角质层，这种兽的名字叫?疏，人们可以用它来避火。
+                  </p>
+                <div class="container">
+                    <img src="../img/yishou/收起.png" alt="Your Image" class="image">
+                    <p class="text" onclick="hide_yishou()">收起</p>
+                </div>
+            </div>
+             
+            <h2>原文</h2> 
+            <p id="yw" class="info_text">鳙鳙鱼</p>
+            <h2>翻译</h2> 
+            <p id="fy" class="info_text">鳙鳙鱼</p>
+        </div> 
+        
+      </div>
     </div>
-    <!-- <div class="scrollable-div">
-      
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor.</p>
-      <p>...</p>
-      
-    </div> -->
+
+    <div class="huadong-container">  
+      <div class="image-with-text">  
+        <img src="../img/3d_point/滑动图标1.png" class="graphic-image" alt="Graphic Image" width="30" height="30"  onclick="LoadMounts('东山一经');mapSetViewList_East()"/>  
+        <div class="text-on-image">东</div>  
+      </div>  
+      <div class="image-with-text" >  
+        <img src="../img/3d_point/滑动图标2.png" class="graphic-image" alt="Graphic Image" width="10" height="10"  onclick="LoadMounts('西山一经')"/>  
+        <div class="text-on-image">西</div>
+      </div>  
+      <div class="image-with-text">  
+        <img src="../img/3d_point/滑动图标2.png" class="graphic-image" alt="Graphic Image" width="10" height="10"  onclick="LoadMounts('南山一经')"/>  
+        <div class="text-on-image">南</div>
+      </div>
+      <div class="image-with-text">  
+        <img src="../img/3d_point/滑动图标2.png" class="graphic-image" alt="Graphic Image" width="10" height="10"  onclick="LoadMounts('北山一经')"/>  
+        <div class="text-on-image">北</div>
+      </div>
+      <div class="image-with-text">  
+        <img src="../img/3d_point/滑动图标2.png" class="graphic-image" alt="Graphic Image" width="10" height="10"  onclick="LoadMounts('中山一经')"/>  
+        <div class="text-on-image">中</div>
+      </div>
+    </div>
     
     <script src="../js/common.js"></script>
     <script src="./map.js"></script>

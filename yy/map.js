@@ -1,14 +1,13 @@
 // import * as mars3d from "mars3d"
 
 var map // mars3d.Map三维地图对象
-var graphicLayer // 矢量图层对象,放置山的点位
-var graphicLayer_info //div图层对象，放置山的介绍div
+var graphicLayer // 矢量图层对象
 var eventTarget = new mars3d.BaseClass() // 事件对象，用于抛出事件到面板中
- 
+
 // 需要覆盖config.json中地图属性参数（当前示例框架中自动处理合并）
 var mapOptions = {
   scene: {
-    center: { lat: 15.468743, lng: 118.499464, alt: 2800000, heading: -15, pitch: -65 }
+    center: { lat: 30.468743, lng: 116.499464, alt: 67446, heading: 0, pitch: -45 }
   },
   basemaps: [
     {
@@ -38,14 +37,6 @@ function onMounted(mapInstance) {
   graphicLayer = new mars3d.layer.GraphicLayer()
   map.addLayer(graphicLayer)
 
-  graphicLayer_info = new mars3d.layer.GraphicLayer()
-  map.addLayer(graphicLayer_info)
-
-  graphicLayer_info.on(mars3d.EventType.click, function (event) {
-    // event.stopPropagation()
-    console.log("监听layer，单击了info对象", event)
-  })
-
   // 在layer上绑定监听事件
   graphicLayer.on(mars3d.EventType.click, function (event) {
     // event.stopPropagation()
@@ -53,8 +44,8 @@ function onMounted(mapInstance) {
   })
   //showDraw()
 
-  //addDemoGraphic1(graphicLayer)
-  //addDemoGraphic3(graphicLayer)
+  addDemoGraphic1(graphicLayer)
+  addDemoGraphic3(graphicLayer)
 }
 
 /**
@@ -90,7 +81,7 @@ function addDemoGraphic1(graphicLayer) {
     attr: { remark: "示例1" }
   })
   //graphicLayer.addGraphic(graphic)
-  graphic.addTo(graphicLayer_info)
+  graphic.addTo(graphicLayer)
 }
 
 
@@ -133,6 +124,53 @@ function removeLayer() {
     tilesetLayer = null
   }
 }
+
+/**
+ * 平台通过draw标绘后保存的geojosn数据（已经内置style了，无需配置symbol）
+ */
+// function showDraw(isFlyTo) {
+//   removeLayer()
+
+//   graphicLayer = new mars3d.layer.GeoJsonLayer({
+//     name: "标绘示例数据",
+//     url: "//data.mars3d.cn/file/geojson/mars3d-draw.json",
+//     popup: "{type} {name}",
+//     queryParameters: {
+//       token: "mars3d" // 可以传自定义url参数，如token等
+//     },
+//     symbol: {
+//       merge: true,
+//       styleOptions: {
+//         // 高亮时的样式
+//         highlight: {
+//           type: "click",
+//           opacity: 0.9
+//         }
+//       }
+//     },
+//     flyTo: isFlyTo
+//   })
+//   map.addLayer(graphicLayer)
+
+//   // load事件,必须在load完成前绑定才能监听
+//   graphicLayer.on(mars3d.EventType.load, function (event) {
+//     if (event.layer) {
+//       console.log("数据加载完成", event)
+//     }
+//   })
+
+//   setTimeout(() => {
+//     // readyPromise是可以load加载数据完成后去获取
+//     graphicLayer.readyPromise.then(function (layer) {
+//       console.log("readyPromise:数据加载完成", layer)
+//     })
+//   }, 5000)
+
+//   // 单击事件
+//   graphicLayer.on(mars3d.EventType.click, function (event) {
+//     console.log("单击了图层", event)
+//   })
+// }
 
 /**
  * 点数据
@@ -694,10 +732,8 @@ function showGCJ02Data() {
 }
 
 var my_switch = true;
-var shanxi = "";
 function LoadMounts(mount_type){
   //removeLayer()
-  shanxi = mount_type;
   graphicLayer.clear()
   if(my_switch==true){
       $.ajax({
@@ -742,22 +778,40 @@ function LoadMounts(mount_type){
 }
 
 
+// function MountData(data){
+//   console.log(333);
+//   var tbodydata = '';
+//   //tbodydata = "<div class='box_contain'>";
+//   $.each(data, function (index, item) {
+//       // tbodydata +="<div class='pic_box'>"+"<img src='../MiaoXiu_Image/"+item.课程id+".jpg' alt='"+item.课程id+".jpg' onclick='show_product("+item.课程id+",1)'>"+
+//       // "<div class = 'name_img'><p>"+item.课程名+"</p>"+
+//       // "<img src='../imgs/购物车.png' class='add-to-cart' alt='Image' item_id='"+item.objectid+"' onclick='add_product("+item.课程id+",1)'></div></div>";
+//       // if(index == 3){
+//       //     tbodydata+="</div>";
+//       //     tbodydata+="<div class='box_contain'>";
+//       // }
+//       // if(index == 7){
+//       //     tbodydata+="</div>";
+//       // }
+
+//   });
+//   return tbodydata;
+// }
+// function MountData(){
+// }
+
+
  
 
 
 function addDemoGraphic(graphicLayer,item){
     var name;
     name = item.名字;
-    const graphic = new mars3d.graphic.DivGraphic({
-    position: [item.经度, item.纬度],
-    style: {
-      // html: `<div class="marsBlackPanel  animation-spaceInDown">
-      //         <div class="marsBlackPanel-text" onclick="Showyishou(`+ item.id + `);ShowInfo(`+ item.id +`);Move2Mount(`+item.经度+`,`+ item.纬度+`)">` 
-      //         + name +
-      //         `</div>
-      //       </div>`,
-      html: `  
-        <div class=".image-container" onclick="Showyishou(`+ item.id + `);ShowInfo(`+ item.id +`);Move2Mount(`+item.经度+`,`+ item.纬度+`)">    
+    const graphic = new mars3d.graphic.DivGraphic({  
+      position: [item.经度, item.纬度],  
+      style: {  
+        html: `  
+        <div class=".image-container">    
           <img src="../img/3d_point/样式1.png" class="graphic-image" alt="Graphic Image" width="50" height="100"/>    
           <div class="text-on-image ">    
             ${name}    
@@ -769,247 +823,12 @@ function addDemoGraphic(graphicLayer,item){
         clampToGround: true,  
         pixelOffset: new Cesium.Cartesian2(0, -25), // 可能需要调整这个值来确保文字在图片内部或上方  
         // 其他样式...  
-    },
+      },  
     attr: { remark: "示例1" }
   })
   //graphicLayer.addGraphic(graphic)
   graphic.addTo(graphicLayer)
 }
-
-function Move2Mount(lng,lat){
-  d_lat = -1.7;
-  d_lng = 0.7;
-  map.setCameraView({ lat: lat+d_lat, lng: lng+d_lng, alt: 50000, heading: 0, pitch: -10 })
-}
-
-function mapSetViewList_East() {
-  // 视角切换（分步执行）, stop设置停留在该视角的时间
-  map.setCameraViewList([
-    { lng: 119.603673, lat: 27.567127, alt: 1334000, heading: 341.5, pitch: -66.7, duration: 2, stop: 0 },
-    { lng: 119.760718, lat: 28.610673, alt: 529296, heading: 348.3, pitch: -39.2, duration: 2, stop: 0 },
-    { lng: 118.694228, lat: 33.007278, alt: 238687.9, heading: 2.4, pitch: -37.3, duration: 2, stop: 0 },
-  ])
-  //show_first();
-  setTimeout(function() {
-    show_first();
-  }, 6000);
-}
-
-
-//传进去的参数id是山的id
-//定义全局变量
-var mountinfo;
-var animal;
-var zhiwu;
-var have_animal;
-var now_shunxu;
-function ShowInfo(id){
-  if(my_switch==true){
-      $.ajax({
-          url: 'http://localhost:5500/search_mountinfo',
-          type: 'get',
-          dataType: 'json',
-          data: {//传进去的
-              type:id
-          }, // Pass the parameter here
-          success: function (data) {//返回结果在data里 数据返回成功之后要干什么
-            $.each(data, function (index, item) {
-            
-               mountinfo = item;
-               console.log("请求了mount");
-               now_shunxu = item.顺序;
-               console.log(now_shunxu);
-              addInfo();
-            });
-
-          }
-      });
-
-  }else{
-      tbodydata ='';
-      $.get('../json/课程.json',{},function(data){
-          creatTable(data);
-          console.log(data[0]["课程名"]);
-          function creatTable(data){
-           //这个函数的参数data是字符串数组，可以是从后台传过来的也可以是从其他任何地方传过来的
-          tbodydata = "<div class='box_contain'>";
-          for (var i=0;i<8;i++) {	
-              tbodydata +="<div class='pic_box'>"+"<img src='../MiaoXiu_Image/"+data[i]["课程ID"]+".jpg' alt='"+data[i]["课程ID"]+".jpg' onclick='show_product("+data[i]["课程ID"]+",1)'>"+
-                "<div class = 'name_img'><p>"+data[i]["课程名"]+"</p>"+
-                 	"<img src='../imgs/购物车.png' class='add-to-cart' alt='Image' item_id='"+data[i]["objectid"]+"' onclick='add_product("+data[i]["课程ID"]+",1)'></div></div>";
-                if(i == 3){
-                  tbodydata+="</div>";
-                  tbodydata+="<div class='box_contain'>";
-              }
-              if(i == 7){
-                  tbodydata+="</div>";
-              }
-          }
-            //现在tableData已经生成好了，把他赋值给上面的tbody
-            $("#type4").html(tbodydata);
-          }		
-      });
-  }
-}
-
-function Showyishou(id){
-  $.ajax({
-    url: 'http://localhost:5500/search_YS',
-    type: 'get',
-    dataType: 'json',
-    data: {//传进去的
-        type:id
-    }, // Pass the parameter here
-    success: function (data) {//返回结果在data里 数据返回成功之后要干什么
-      $.each(data, function (index, item) {
-        animal = data;
-        have_animal = true;
-        console.log("请求了animal");
-      });
-    }
-  });
-}
-
-
-//把信息添加到div并显示
-function addInfo(){
-  console.log(have_animal);
-  console.log(mountinfo.名字);
-  var yishoudata = "";
-  // 隐藏 id 为 "info" 的 div，并设置新的 HTML 内容
-  $("#info").hide();
-  $(".jieshao").hide();
-  $("#shunxu").html(mountinfo.顺序介绍);
-  $("#Mount_name").html(mountinfo.所属山系);
-  $("#Mount_name").html(mountinfo.名字);
-  $("#position").html(mountinfo.位置);
-  $("#feature").html(mountinfo.特征);
-  $("#yw").html(mountinfo.原文);
-  $("#fy").html(mountinfo.翻译);
-  var bd_map = new BMapGL.Map("map");                // 创建地图实例
-  lng = parseFloat(mountinfo.经度);
-  lat = parseFloat(mountinfo.纬度);
-  var point = new BMapGL.Point(lng, lat); 
-  var marker = new BMapGL.Marker(point);        // 创建标注   
-  bd_map.addOverlay(marker);   
-  bd_map.centerAndZoom(point, 5);                      // 设置地图级别
-  bd_map.enableScrollWheelZoom(true); 
-  bd_map.setMapStyleV2({     
-    styleId: '6e33d976c728aa940a5926779afb5000'
-  });
-  if(have_animal == true) {
-    $.each(animal, function (index, item) {
-      yishoudata +=  
-      `<div class='box_contain'>
-          <div class='pic_box' onclick="show_yishou(`+item.id+`)">
-            <img src='../img/yishou/`+item.id+`.png'>
-            <p>`+item.名字+`</p>
-          </div>`
-      console.log(item.功用);
-    });
-    yishoudata += "</div>";
-    $("#yishoubox").html(yishoudata);
-  }
-  else{
-    yishoudata =  "<p class='ys_p'>暂无记载</p>";
-    $("#yishoubox").html(yishoudata);
-  }    // 使用 slideDown() 方法以动画效果向左滑动显示内容
-  $("#info").slideDown("slow");
-  have_animal = false;
-}
-
-
-function show_yishou(id){
-  // $(".jieshao").slideUp("slow");//返回结果在data里 数据返回成功之后要干什么
-  $.ajax({
-    url: 'http://localhost:5500/search_animal',
-    type: 'get',
-    dataType: 'json',
-    data: {//传进去的
-        type:id
-    }, // Pass the parameter here
-    success: function (data) {
-      // $(".jieshao").slideUp("slow");//返回结果在data里 数据返回成功之后要干什么
-      $.each(data, function (index, item) {
-        $("#ys_name").html(item.名字);
-        $("#hdfw").html(item.活动范围);
-        $("#shhj").html(item.生活环境);
-        $("#wxtz").html(item.外形特征);
-        $("#gy").html(item.功用);
-        $("#ys_yw").html(item.原文);
-        $("#ys_fy").html(item.翻译);
-        $("#gy").html(item.功用);
-        $(".jieshao").slideDown("slow");
-
-      });
-    }
-  });
-}
-
-
-function change_mount(num){
-  var shunxu;
-  if(num == 1){
-    shunxu = now_shunxu - 1;
-  }else{
-    shunxu = now_shunxu + 1;
-  }
-  $.ajax({
-    url: 'http://localhost:5500/search_mount',
-    type: 'get',
-    dataType: 'json',
-    data: {//传进去的
-        shunxu:shunxu,
-        shanxi:shanxi
-    }, // Pass the parameter here
-    success: function (data) {
-      $.each(data, function (index, item) {
-        //console.log(item.所属山系);
-        id = item.id;
-        Showyishou(id);
-        ShowInfo(id);
-        lng = parseFloat(item.经度);
-        lat = parseFloat(item.纬度);
-        Move2Mount(lng,lat);
-      });
-    }
-  });
-  
-}
-
-function show_first(){
-  $.ajax({
-    url: 'http://localhost:5500/search_mount',
-    type: 'get',
-    dataType: 'json',
-    data: {//传进去的
-        shunxu:1,
-        shanxi:shanxi
-    }, // Pass the parameter here
-    success: function (data) {
-      $.each(data, function (index, item) {
-        //console.log(item.所属山系);
-        id = item.id;
-        Showyishou(id);
-        ShowInfo(id);
-        lng = parseFloat(item.经度);
-        lat = parseFloat(item.纬度);
-        Move2Mount(lng,lat);
-      });
-    }
-  });
-  
-}
-
-$("#hideInfoBtn").click(function() {
-  // 隐藏 id 为 "info" 的 div
-  $("#info").slideUp("slow");
-});
-
-function hide_yishou(){
-  $(".jieshao").slideUp("slow");
-}
-
 
 // 获取所有的.image-with-text元素  
 var elements = document.querySelectorAll('.image-with-text');  
@@ -1078,40 +897,9 @@ document.addEventListener('DOMContentLoaded', function() {
   });    
 });
 
-  // // 获取图片元素和提示框元素
-  // var image = document.getElementById("last");
-  // var tooltip = document.getElementById("last_tip");
-  
-  // // 当鼠标移入图片时显示提示框
-  // image.addEventListener("mouseenter", function(event) {
-  //   // 设置提示框位置为鼠标位置
-  //   tooltip.style.left = (event.clientX - 5) + "px";
-  //   tooltip.style.top = (event.clientY - 5) + "px";
-  //   // 显示提示框
-  //   tooltip.style.display = "block";
-  // });
-  
-  // // 当鼠标移出图片时隐藏提示框
-  // image.addEventListener("mouseleave", function() {
-  //   // 隐藏提示框
-  //   tooltip.style.display = "none";
-  // });
 
-  // // 获取图片元素和提示框元素
-  // var image1 = document.getElementById("next");
-  // var tooltip1 = document.getElementById("next_tip");
-  
-  // // 当鼠标移入图片时显示提示框
-  // image1.addEventListener("mouseenter", function(event) {
-  //   // 设置提示框位置为鼠标位置
-  //   tooltip1.style.left = (event.clientX - 5) + "px";
-  //   tooltip1.style.top = (event.clientY - 5) + "px";
-  //   // 显示提示框
-  //   tooltip1.style.display = "block";
-  // });
-  
-  // // 当鼠标移出图片时隐藏提示框
-  // image1.addEventListener("mouseleave", function() {
-  //   // 隐藏提示框
-  //   tooltip1.style.display = "none";
-  // });
+
+
+
+
+
