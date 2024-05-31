@@ -44,18 +44,9 @@
     "type": "git",
     "url": "https://github.com/marsgis/mars3d-es5-example.git"
   },
-<<<<<<< HEAD
-  "author": "Daniel Abraham <dannibla@outlook.com>",
-  "main": "app.js",
-  "dependencies": {
-    "express": "^4.19.2",
-    "package.json": "^0.0.0",
-    "pg": "^8.11.5"
-=======
   "bugs": {
     "url": "https://github.com/marsgis/mars3d-es5-example/issues",
     "email": "wh@marsgis.cn"
->>>>>>> 649356ee9da0d293aa55bf5cdc556efcdc2f4fc2
   },
   "keywords": [
     "marsgis",
@@ -68,5 +59,9 @@
   ],
   "author": "火星科技",
   "license": "Apache-2.0",
-  "homepage": "http://mars3d.cn"
+  "homepage": "http://mars3d.cn",
+  "dependencies": {
+    "express": "^4.19.2",
+    "pg": "^8.11.5"
+  }
 }
