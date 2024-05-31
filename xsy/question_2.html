@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="title" content="Ask online Form">
+    <meta name="description" content="The Ask is a bootstrap design help desk, support forum website template coded and designed with bootstrap Design, Bootstrap, HTML5 and CSS. Ask ideal for wiki sites, knowledge base sites, support forum sites">
+    <meta name="keywords" content="HTML, CSS, JavaScript,Bootstrap,js,Forum,webstagram ,webdesign ,website ,web ,webdesigner ,webdevelopment">
+    <meta name="robots" content="index, nofollow">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="language" content="English">
+    <link href="css/bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <!-- <link href="css/animate.css" rel="stylesheet" type="text/css"> -->
+    <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="css/responsive.css" rel="stylesheet" type="text/css">
+     </head>
+
+<body style="background-color: #78421228;">
+<script>
+    question_id=null;
+    window.onload = function() {
+        
+    // 现在你可以使用 questionId 变量来访问 question.question_id 的值
+
+				var aData = [{
+    "imgUrl": "image/1.jpeg",
+    "authorID": 1,
+    "objectID": 12,
+    "time": "2023-10-26 00:00:00",
+    "context": "\"山海经作品真是太美了，色彩斑斓、纹路精致，简直就是艺术的杰作！\""
+  },
+  {
+    "imgUrl": "image/2.jpeg",
+    "authorID": 2,
+    "objectID": 411,
+    "time": "2023-10-27 00:00:00",
+    "context": "\"山海经作品真是太美了，色彩斑斓、纹路精致，简直就是艺术的杰作！\""
+  },
+  {
+    "imgUrl": "image/3.jpeg",
+    "authorID": 3,
+    "objectID": 282,
+    "time": "2023-10-28 00:00:00",
+    "context": "\"山海经作品真是太美了，色彩斑斓、纹路精致，简直就是艺术的杰作！\""
+  },
+  {
+    "imgUrl": "image/4.jpeg",
+    "authorID": 4,
+    "objectID": 360,
+    "time": "2023-10-29 00:00:00",
+    "context": "\"山海经作品真是太美了，色彩斑斓、纹路精致，简直就是艺术的杰作！\""
+  },
+  {
+    "imgUrl": "image/5.jpeg",
+    "authorID": 5,
+    "objectID": 302,
+    "time": "2023-10-30 00:00:00",
+    "context": "\"山海经作品真是太美了，色彩斑斓、纹路精致，简直就是艺术的杰作！\""
+  },
+  {
+    "imgUrl": "image/6.jpg",
+    "authorID": 6,
+    "objectID": 278,
+    "time": "2023-10-31 00:00:00",
+    "context": "\"被山海经的神奇之美深深吸引，每一针每一线都透露着匠心独运，真是令人陶醉！\""
+  },
+  {
+    "imgUrl": "image/7.jpeg",
+    "authorID": 7,
+    "objectID": 314,
+    "time": "2023-11-01 00:00:00",
+    "context": "\"被山海经的神奇之美深深吸引，每一针每一线都透露着匠心独运，真是令人陶醉！\""
+  },
+  {
+    "imgUrl": "image/8.jpeg",
+    "authorID": 8,
+    "objectID": 202,
+    "time": "2023-11-02 00:00:00",
+    "context": "\"被山海经的神奇之美深深吸引，每一针每一线都透露着匠心独运，真是令人陶醉！\""
+  },
+  {
+    "imgUrl": "image/9.jpeg",
+    "authorID": 9,
+    "objectID": 303,
+    "time": "2023-11-03 00:00:00",
+    "context": "\"被山海经的神奇之美深深吸引，每一针每一线都透露着匠心独运，真是令人陶醉！\""
+  }
+];
+
+
+
+  var aData1 = [{
+    "imgUrl": "image/12.jpeg",
+    "authorID": 1,
+    "objectID": 12,
+    "time": "2023-10-26 00:00:00",
+    "context": "\"山海经作品真是太美了，色彩斑斓、纹路精致，简直就是艺术的杰作！\""
+  },
+  {
+    "imgUrl": "image/14.jpeg",
+    "authorID": 2,
+    "objectID": 411,
+    "time": "2023-10-27 00:00:00",
+    "context": "\"山海经作品真是太美了，色彩斑斓、纹路精致，简直就是艺术的杰作！\""
+  },
+  {
+    "imgUrl": "image/15.jpeg",
+    "authorID": 3,
+    "objectID": 282,
+    "time": "2023-10-28 00:00:00",
+    "context": "\"山海经作品真是太美了，色彩斑斓、纹路精致，简直就是艺术的杰作！\""
+  },
+  {
+    "imgUrl": "image/16.jpeg",
+    "authorID": 4,
+    "objectID": 360,
+    "time": "2023-10-29 00:00:00",
+    "context": "\"山海经作品真是太美了，色彩斑斓、纹路精致，简直就是艺术的杰作！\""
+  },
+ ];
+
+  var oUl = document.getElementById("comments-list");
+  for (var i = 0; i < aData.length; i++) {
+					var oLi = document.createElement("li");
+					var data = aData[i];
+
+					// 创建评论结构
+    var commentHTML = '<div class="comment-main-level">' +
+                          '<div class="comment-avatar"><img src="' + data["imgUrl"] + '" alt=""></div>' +
+                          '<div class="comment-box">' +
+                              '<div class="comment-head">' +
+                                  '<h6 class="comment-name"><a href="#">' + data["objectID"] + '</a></h6>' +
+                                  '<span><i class="fa fa-clock-o" aria-hidden="true"> ' + data["time"] + '</i></span>' +
+                              '</div>' +
+                              '<div class="comment-content">' + data["context"] + '</div>' +
+                              '<div class="comment-content">' + data["time"] + '</div>' +
+                          '</div>' +
+                      '</div>';
+
+    // 将评论结构添加到 <li> 元素中
+    oLi.innerHTML = commentHTML;
+
+    // 将 <li> 元素添加到评论列表容器
+    oUl.appendChild(oLi);
+	}
+
+
+    var oU2 = document.getElementById("reply-list");
+
+for (var i = 0; i < aData1.length; i++) {
+    var oLi = document.createElement("li");
+    var data = aData1[i];
+
+    // 创建评论结构
+    var commentHTML =
+        '<div class="comment-avatar"><img src="' + data["imgUrl"] + '" alt=""></div>' +
+        '<div class="comment-box">' +
+            '<div class="comment-head">' +
+                '<h6 class="comment-name"><a href="#">' + data["objectID"] + '</a></h6>' +
+                '<span><i class="fa fa-clock-o" aria-hidden="true"> ' + data["time"] + '</i></span>' +
+                '<i class="fa fa-reply"></i>' +
+                '<i class="fa fa-heart"></i>' +
+            '</div>' +
+            '<div class="comment-content">' + data["context"] + '</div>' +
+            '<div class="comment-content">' + data["time"] + '</div>' +
+        '</div>';
+
+    // 包装评论结构在 <li> 元素中
+    oLi.innerHTML = '<li>' + commentHTML + '</li>';
+
+    // 将 <li> 元素添加到评论列表容器
+    oU2.appendChild(oLi.firstChild); // Using .firstChild to append only the <li> content
+}
+
+
+
+}
+</script>
+<div class="container-top">
+    <div class="navbar-top">
+      
+        <nav>
+            <ul>
+            <li class="dropdown-top">
+                <a href="../home.html" class="nav_text_big">首页</a>
+            </li>
+            <li class="dropdown-top">
+                <a href="../basis/index.html" class="nav_text_big">古观山海</a>
+            </li>
+            <li class="dropdown-top">
+                <a href="../html/WalkIn.html" class="nav_text_big">云游山海</a>
+            </li>
+            <li>
+              <a href="../html/periphery.html" class="nav_text_big">山海足迹</a>
+            </li>
+            <li>
+              <a href="../html/产业概览.html" class="nav_text_big">登录</a>
+            </li>
+
+            </ul>
+          </nav>
+          <a href="../html/logIn.html">
+            <img src="../img/登录.png" class="menu-icon-top shopcar"/>
+          </a> 
+          <a href="../html/购物车.html">
+              <img src="../img/_购物车.png" class="menu-icon-top shopcar"/>
+          </a> 
+
+    </div>
+  </div>
+
+    <section class="header-descriptin329">
+        <div class="container">
+            <h3>山海论坛</h3>
+            <ol class="breadcrumb breadcrumb839">
+                <li><a href="#">首页</a></li>
+                <li><a href="category.html">山海论坛</a></li>
+                <!-- <li class="active">山海非遗</li> -->
+            </ol>
+        </div>
+    </section>
+    <section class="main-content920">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-9">
+                    <div class="post-details">
+                        <div class="details-header923">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="post-title-left129">
+                                        <h3>分享一个山海经中让你觉得最神奇的故事</h3> </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="post-que-rep-rihght320"> <a href="category.html"><i class="fa fa-question-circle" aria-hidden="true"></i> 提问</a> <a href="#" class="r-clor10">回答</a> </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="post-details-info1982">
+                            <p>《山海经》就像一座博物馆,收藏着中国古代最神奇、最瑰丽的文化瑰宝。打开这部奇书,就仿佛穿越时空,置身于一个充满想象力和神秘色彩的世界。在这里,你会遇见夸父、女娲、后羿等神话人物,聆听他们那些惊心动魄的传奇故事。你会看到狌狌、何罗鱼这样形态奇特的异兽,感受它们超乎寻常的神力。你还会领略到中国古人对大自然的敬畏之心,以及他们对未知世界的无限想象。</p>
+                            
+                            <hr>
+                            <div class="post-footer29032">
+                                <div class="l-side2023"> <i class="fa fa-check check2" aria-hidden="true"> 已回答</i> <a href="#"><i class="fa fa-star star2" aria-hidden="true">  5</i></a> <i class="fa fa-folder folder2" aria-hidden="true"> 词条</i> <i class="fa fa-clock-o clock2" aria-hidden="true"> 3年前</i> <a href="#"><i class="fa fa-commenting commenting2" aria-hidden="true">15 回答</i></a> <i class="fa fa-user user2" aria-hidden="true"> 70 浏览</i> </div>
+                                <div class="l-rightside39">
+                                    <button type="button" class="tolltip-button thumbs-up2" data-toggle="tooltip" data-placement="bottom" title="Like"><i class="fa fa-thumbs-o-up " aria-hidden="true"></i></button>
+                                    <button type="button" class="tolltip-button  thumbs-down2" data-toggle="tooltip" data-placement="bottom" title="Dislike"><i class="fa fa-thumbs-o-down" aria-hidden="true"></i></button> <span class="single-question-vote-result">+50</span> </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="share-tags-page-content12092">
+                        <div class="l-share2093"> <i class="fa fa-share" aria-hidden="true"> 分享</i> </div>
+                        <div class="R-tags309"> <i class="fa fa-tags" aria-hidden="true"> 词条, 提问, 发布者</i> </div>
+                    </div>
+                    <div class="author-details8392">
+                        <div class="author-img202l"> <img src="image/haoyifu.jpg" alt="image">
+                            <div class="au-image-overlay text-center"> <a href="#"><i class="fa fa-plus-square-o" aria-hidden="true"></i></a> </div>
+                        </div> <span class="author-deatila04re">
+                   <h5>发布者介绍</h5>
+                    <p>女性，66岁，湖南省《山海经》研究中心主任，忠实爱好者和传承者，专注于山海经动物研究与传承近40年。她是一位深具艺术情怀的古籍研究者，在传统工艺和现代创新之间找到了独特的平衡点。</p>
+                    
+                </span> </div>
+                    <div class="related3948-question-part">
+                        <h3>相关问题</h3>
+                        <hr>
+                        <p><a href="question_1.html"><i class="fa fa-angle-double-right" aria-hidden="true"></i>#山海初印象 你是怎么爱上山海经的？</a></p>
+                        <p><a href="question_2.html"><i class="fa fa-angle-double-right" aria-hidden="true"></i>#神奇山海故事 分享一个山海经中让你觉得最神奇的故事</a></p>
+                        <p><a href="question_3.html"><i class="fa fa-angle-double-right" aria-hidden="true"></i>#山海奥秘 山海经为什么这么难懂？</a></p>
+                        <p><a href="question_4.html"><i class="fa fa-angle-double-right" aria-hidden="true"></i>#山海创新 b站上的山海经变装视频太惊艳了</a></p>
+                    </div>
+                    <div class="comment-list12993">
+                        <div class="container">
+                            <div class="row">
+                           
+                                <div class="comments-container">
+                                    <ul id="comments-list" class="comments-list">
+                                        <li>
+                                             <div class="comment-main-level">
+                                                <!-- Avatar -->
+                                                <div class="comment-avatar"><img src="image/1.jpeg" alt=""></div>
+                                                <!-- Contenedor del Comentario -->
+                                                <div class="comment-box">
+                                                    <div class="comment-head">
+                                                        <h6 class="comment-name"><a href="#">43</a></h6> <span><i class="fa fa-clock-o" aria-hidden="true"> January 15 , 2014 at 10:00 pm</i></span> <i class="fa fa-reply"></i> <i class="fa fa-heart"></i> </div>
+                                                    <div class="comment-content"> "山海被评为非遗真的实至名归，我印象中有松桃山海！" </div>
+                                                    <div class="comment-content"> 2023-11-05 00:00:00 </div>
+                                                </div>
+                                            </div>
+                                                
+                                            <div class="comment-main-level">
+                                                <!-- Avatar -->
+                                                <div class="comment-avatar"><img src="image/13.jpeg" alt=""></div>
+                                                <!-- Contenedor del Comentario -->
+                                                <div class="comment-box">
+                                                    <div class="comment-head">
+                                                        <h6 class="comment-name"><a href="#">43</a></h6> <span><i class="fa fa-clock-o" aria-hidden="true"> January 15 , 2014 at 10:00 pm</i></span> <i class="fa fa-reply"></i> <i class="fa fa-heart"></i> </div>
+                                                    <div class="comment-content"> "我们家乡的雷山山海2006年5月20日申遗成功，走向了全国和世界。" </div>
+                                                    <div class="comment-content"> 2023-11-07 00:00:00 </div>
+                                                </div>
+                                            </div>
+                                            <ul class="comments-list reply-list"id="reply-list"></ul>
+                                               
+                                            </ul>
+                                        </li>
+                                    </ul>
+                        
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="comment289-box">
+                        <h3>留下您的回答</h3>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="replay-input-name42389">
+                                    <p>用户id*</p>
+                                    <input type="text" class="name-box24894 input238-design" placeholder="您的id"> </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="replay-email-input89298">
+                                    <p>邮箱*</p>
+                                    <input type="text" class="name-box24894 input238-design" placeholder="您的邮箱（方便我们联系您）"> </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="replay-input-websit128923">
+                                    <p>备注</p>
+                                    <input type="text" class="name-box24894 input238-design" placeholder="您的备注"> </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="post9320-box">
+                                    <input type="text" class="comment-input219882" placeholder="输入您的回答"> </div>
+                                <button type="button" class="pos393-submit">提交回答</button>
+                            </div>
+                           
+                        </div>
+                    </div>
+                </div>
+                <!--                end of col-md-9 -->
+                <!--           strart col-md-3 (side bar)-->
+                <aside class="col-md-3 sidebar97239">
+                    <div class="status-part3821">
+                   <h4>山海社区</h4>
+                       
+                        <a href="./shangchuanzuopin.html"><i class="fa fa-question-circle" aria-hidden="true"> 上传作品</i></a>
+                        <a href="./category.html"><i class="fa fa-question-circle" aria-hidden="true"> 山海论坛</i></a>
+                    </div>  
+                    <div class="categori-part329">
+                        <h4>云游山海</h4>
+                        <ul>
+                            <li><a href="../html/WalkIn.html">《东山经》之山海</a></li>
+                            <li><a href="../html/WalkIn.html">《南山经》之山海</a></li>
+                            <li><a href="../html/WalkIn.html">《西山经》之山海</a></li>
+                            <li><a href="../html/WalkIn.html">《北山经》之山海</a></li>
+                            <li><a href="../html/WalkIn.html">《中山经》之山海</a></li>
+                            
+                        </ul>
+                    </div>
+       
+                    <div class="social-part2189">
+                       <h4>最新作品</h4>
+                       <ul id="item-list"></ul>
+                     </div>
+       
+                     <script>
+                       // Function to load and display items from the JSON file
+                       async function loadItems() {
+                         try {
+                           const response = await fetch('erchuangzuopin.json'); // Fetch the JSON file
+                           const items = await response.json(); // Parse the JSON
+                     
+                           // Get the item list element
+                           const itemList = document.getElementById('item-list');
+                     
+                           // Reverse the items array to display from last to first and take the first 4 items
+                           const latestItems = items.slice().reverse().slice(0, 4);
+                     
+                           // Loop through the items and create the list elements
+                           latestItems.forEach(item => {
+                             // Create a list item element
+                             const listItem = document.createElement('li');
+                             listItem.className = 'rss-one';
+                             listItem.setAttribute('onclick', `go_to_item(${item.id}, 0)`);
+                     
+                             // Create a strong element to hold the item details
+                             const strong = document.createElement('strong');
+                     
+                             // Create a span element for the item name
+                             const span = document.createElement('span');
+                             span.textContent = item.作品名称;
+                     
+                             // Create a small element for the description
+                             const small = document.createElement('small');
+                             small.textContent = `寓意："${item.寓意}"，发布者ID：${item.发布者ID}`;
+                     
+                             // Append the span and small elements to the strong element
+                             strong.appendChild(span);
+                             strong.appendChild(document.createElement('br'));
+                             strong.appendChild(small);
+                     
+                             // Append the strong element to the list item
+                             listItem.appendChild(strong);
+                     
+                             // Append the list item to the item list
+                             itemList.appendChild(listItem);
+                           });
+                         } catch (error) {
+                           console.error('Error loading items:', error);
+                         }
+                       }
+                     
+                       // Call the function to load items when the page loads
+                       document.addEventListener('DOMContentLoaded', loadItems);
+                     </script>
+                       
+        <!--              login part-->
+        <div class="login-part2389">
+           <h4>登录</h4>
+           <div class="input-group300">
+           <span><i class="fa fa-user" aria-hidden="true"></i></span>
+           <input type="text" class="namein309" placeholder="输入用户名">
+           </div>
+               <div class="input-group300">
+           <span><i class="fa fa-lock" aria-hidden="true"></i></span>
+           <input type="password" class="passin309" placeholder="输入密码">
+           </div>
+           <a href="#"><button type="button" class="userlogin320">登录</button></a>
+           <div class="rememberme">
+                         <label><input type="checkbox" checked="checked"> 记住我</label>
+                         <a href="#" class="resbutton3892">注册</a>
+                     </div>
+       </div>
+       
+                 
+                  </aside>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // 获取要替换的元素
+        var postTitleElement = document.querySelector('.post-title-left129 h3');
+        var topicOverviewElement = document.querySelector('.post-details-info1982 p');
+        var likesElement = document.querySelector('.post-footer29032 .fa-star');
+        var publishTimeElement = document.querySelector('.post-footer29032 .fa-clock-o');
+        var answersElement = document.querySelector('.post-footer29032 .fa-commenting');
+        var viewsElement = document.querySelector('.post-footer29032 .fa-user');
+        
+        
+        topicData=null;
+        document.addEventListener('DOMContentLoaded', function() {
+            // 从文件中获取JSON数据
+            fetch('huati.json')
+                .then(response => response.json()) // 将响应解析为JSON
+                .then(data => {
+                    // 在这里使用获取到的数据，例如：
+                    console.log(data); // 输出获取到的JSON数据对象
+                    
+                    var topicData_c = null;
+                    question_id = parseInt(localStorage.getItem('question_id')); // 将字符串转换为整数
+console.log(question_id);
+                    for (var i = 0; i < data.length; i++) {
+                        if (data[i].id ===question_id ) {
+                            topicData_c = data[i];
+                                                // 存储符合条件的数据为 jsonObject
+                    // 更新元素内容
+        if (postTitleElement) {
+            postTitleElement.textContent = topicData_c.topic_overview;
+        }
+        
+        if (topicOverviewElement) {
+            topicOverviewElement.textContent = topicData_c.description;
+        }
+        
+        if (likesElement) {
+            likesElement.textContent = topicData_c.likes;
+        }
+        
+        if (publishTimeElement) {
+            publishTimeElement.textContent = topicData_c.publish_time;
+        }
+        
+        if (answersElement) {
+            answersElement.textContent = topicData_c.answers + " 回答";
+        }
+        
+        if (viewsElement) {
+            viewsElement.textContent = topicData_c.views + " 浏览";
+        }
+        
+                            break;
+                        }
+                    }
+                    
+ // 存储符合条件的数据为 jsonObject
+ topicData = topicData_c;
+                    
+                })
+                .catch(error => {
+                    console.error('Error fetching JSON:', error);
+                });
+        });
+        
+        
+        
+        
+        
+        </script>
+
+
+
+    <!--    footer -->
+    <div class="footer-search">
+        <div class="container">
+            <div class="row">
+                <div id="custom-search-input">
+                    <div class="input-group col-md-12"> <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                        <input type="text" class="  search-query form-control user-control30" placeholder="在这里搜索...." /> <span class="input-group-btn">
+                                    <button class="btn btn-danger" type="button">
+                                        <span class=" glyphicon glyphicon-search"></span> </button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <section class="footer-part">
+        <div class="container">
+            <div class="row">
+                
+                <div class="col-md-3">
+                  <div class="info-part-one320">
+                   <h4>基本信息</h4>
+                    <p>武汉大学遥感信息工程学院《网络GIS实习》第一组</p>
+                    <h4>地址 :</h4>
+                    <p>湖北省武汉市珞喻路129号武汉大学信息学部 教学实验大楼3楼、6楼—9楼,五号教学楼,宇航科学与技术研究院</p>
+                    <h4>联系方式</h4>
+                    <p>电话号码: 18986197481</p>
+                    <p>邮箱账号 : </p>
+                    <p>2021302191847@whu.edu.cn</p>
+                    </div>
+                </div>
+                   <div class="col-md-3">
+                  <div class="info-part-two320">
+              <h4>快速链接</h4>
+                   <a href="../html/WalkIn.html"><p>-主页</p></a>
+                     <a href="#"><p>-山海社区</p></a>
+                     <a href="#"><p>-山海商城</p></a>
+                     <a href="../html/周边推荐2.html"><p>-周边推荐</p></a>
+                     <a href="#"><p>-产业概览</p></a>
+                     <a href="shangchuanzuopin.html"><p>-作品上传</p></a>
+                     <a href="category.html"><p>-山海论坛</p></a>
+                    </div>
+                </div>
+                   <div class="col-md-3">
+                  <div class="info-part-three320">
+                   <h4>人气作品</h4>
+                  <div class="news-info209">
+                  
+                   <h5>绉绣双肩包（“花溪”）</h5>
+                    <p>这幅山海作品，凝聚了艺术家卓越的绣艺技巧与独到的创意思维...</p> 
+                    <small>2017-7-16</small>
+                      </div>
+                       <div class="news-info209">
+                <h5>破线绣毛衣（“花溪”）</h5>
+                    <p>艺术家精湛地运用山海传统工艺，将古老的手工技艺与现代审美巧妙融合 ...</p>
+                    <small>2019-7-9</small>
+                      </div>
+                        <div class="news-info209">
+                <h5>辫绣手提包（“锦绣黔坤”）</h5>
+                    <p>山海作品展现了艺术家对大自然的独到感悟，细致入微的绣工勾勒出山水...</p>
+                    <small>2023-12-29</small>
+                      </div>
+                    
+                    </div>
+                </div>
+                   <div class="col-md-3">
+                  <div class="info-part-four320">
+                   <h4>山海论坛</h4>
+                   <div class="tweet-details29">
+                    <h5>山海初体验</h5>
+                    <p><i class="fa fa-twitter-square" aria-hidden="true"></i><a href="post-deatils.html"> 山海，宛如大地的绚烂花开，细腻而瑰丽，它是苗族文化的精髓 ...</a></p>
+                   
+                      </div>
+                            <div class="tweet-details29">
+                    <h5>山海非遗</h5>
+                    <p><i class="fa fa-twitter-square" aria-hidden="true"></i><a href="miaoxiufeiyi.html">苗族刺绣技艺进入首批国家级保护的非遗保护名录 ...</a></p>
+                  
+                      </div>
+                            <div class="tweet-details29">
+                    <h5>山海潮牌</h5>
+                    <p><i class="fa fa-twitter-square" aria-hidden="true"></i><a href="miaoxiuchaopai.html">走进苗族聚居的贵州，世世代代的苗族人，用绣在服饰上的符号和图案...</a></p>
+                     
+                      </div>
+                      <div class="tweet-details29">
+                        <h5>山海体验</h5>
+                        <p><i class="fa fa-twitter-square" aria-hidden="true"></i><a href="miaoxiutiyan.html">近年来，贵州多地因地制宜，利用自身独特的地理景观...</a></p>
+                       
+                          </div>
+                      <div class="tweet-details29">
+                      <h5>山海伴手礼</h5>
+                      <p><i class="fa fa-twitter-square" aria-hidden="true"></i><a href="miaoxiubanshouli.html">在每个美好的时刻，我想将一份独特的礼物送给你...</a></p>
+                     
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+<section class="footer-social">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <p>Copyright 2023 山海 | <strong>《网络GIS实习》第一组</strong></p>
+            </div>
+             <div class="col-md-6">
+              <div class="social-right2389">
+               <a href="#"><i class="fa fa-twitter-square" aria-hidden="true"></i></a>
+               <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+               <a href="#"><i class="fa fa-google-plus" aria-hidden="true"></i></a>
+               <a href="#"><i class="fa fa-youtube" aria-hidden="true"></i></a>
+               <a href="#"><i class="fa fa-skype" aria-hidden="true"></i></a>
+               <a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+               <a href="#"><i class="fa fa-rss" aria-hidden="true"></i></a>
+                 </div>
+            </div>
+        </div>
+    </div>
+</section>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="js/jquery-3.1.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/npm.js"></script>
+    <script>
+        function go_to_item(item_id,is_class){
+    localStorage.setItem('item_id', item_id);
+    localStorage.setItem('item_type', is_class);
+    window.location.href = '../html/product.html';
+    }
+    </script>
+</body>
+
+</html>

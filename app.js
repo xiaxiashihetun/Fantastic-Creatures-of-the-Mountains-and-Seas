@@ -1,7 +1,6 @@
 const express = require('express');
 const { Client } = require('pg');    //引入express和pg框架
-const connectionString = 'postgres://postgres:123456@localhost:5432/ShanHaiJing';
-
+const connectionString = 'postgres://postgres:Xxsht123@localhost:5858/shanhaizuopin'
 const client = new Client({
     connectionString: connectionString
 });
@@ -11,7 +10,12 @@ client.connect();
 var app = express();
 
 app.set('port', process.env.PORT || 5500);
+const cors = require('cors');
+const fs = require('fs');
 
+let mySwitch = true; // 默认值为false
+
+app.use(cors());
 
 
 //查询语句  翻页查询
@@ -326,3 +330,223 @@ app.listen(5500, function () {
             //         }
             //     });
             // });	
+
+
+// // 检查数据库和表是否存在的函数
+// async function doesDatabaseAndTableExist() {
+//     const checkClient = new Client({
+      
+//       connectionString: 'postgres://postgres:Xxsht123@localhost:5858/shanhaizuopin', 
+//     });
+  
+//     try {
+//         await checkClient.connect();
+  
+//         // 检查数据库是否存在
+//         const databaseResult = await checkClient.query('SELECT 1 FROM pg_database WHERE datname = $1', ['shanhaizuopin']);
+//         if (databaseResult.rows.length === 0) {
+//             console.log('数据库 "shanhaizuopin" 不存在。跳过数据库连接。');
+//             return false;
+//         }
+  
+//         // 检查表是否存在
+//         const tableResult = await checkClient.query('SELECT 1 FROM information_schema.tables WHERE table_name = $1', ['erchuangzuopin']);
+//         if (tableResult.rows.length === 0) {
+//             console.log('表 "erchuangzuopin" 不存在。跳过数据库连接。');
+//             return false;
+//         }
+  
+//         // 数据库和表都存在
+//         return true;
+//     } catch (error) {
+//         console.error('连接数据库时出错:', error.message);
+//         return false; // 返回 false 表示数据库或表不存在
+//     } finally {
+//         await checkClient.end();
+//     }
+//   }
+
+
+// // 在检查数据库存在性后启动应用程序
+// doesDatabaseAndTableExist().then((databaseExists) => {
+//     if (databaseExists) {
+//         mySwitch = true; // 设置 mySwitch 为 true
+//         client = new Client({
+//             connectionString: connectionString
+//         });
+//         client.connect();
+//         console.log('已连接到数据库');
+//     } else {
+//         console.log('跳过数据库连接，数据直接加入到json文件中');
+//     }
+
+//     // 在这里定义你的路由和其他配置
+//     // ...
+
+//     // 启动 Express 服务器
+//     app.listen(app.get('port'), () => {
+//         console.log(`服务器正在运行在端口 ${app.get('port')}`);
+//         console.log(`mySwitch 的值为: ${mySwitch}`);
+//     });
+// }).catch((error) => {
+//     console.error('检查数据库存在性时出错:', error);
+// });
+
+// 在这里定义你的路由和其他配置
+app.get('/checkConnection', (req, res) => {
+    // 在这个示例中，将 mySwitch 的值作为 JSON 对象发送回前端
+    res.json({ mySwitch: mySwitch });
+  });
+
+  //增加到数据库的路由
+app.get('/addtodb', function(req, res) {
+    res.setHeader('Access-Control-Allow-Origin','*');
+    const id=req.query.id;
+    const author = req.query.author;
+    const name = req.query.name;
+    const picture = req.query.picture;
+    const topic = req.query.topic;
+    const description = req.query.description;
+    const meaning=req.query.meaning;
+    const longtitude=req.query.longtitude;
+    const latitude=req.query.latitude;
+    const adcode=req.query.adcode;
+    const ename=req.query.ename;
+    const price=req.query.price;
+    const ups=req.query.ups;
+    const soldnum=req.query.soldnum;
+    const query = `
+    INSERT INTO erchuangzuopin (
+        id,发布者id, 作品名称, 作品图片的存储路径, 主题, 作品简单描述,寓意,经度, 纬度,地理编码,地区,价格,点赞数,销量
+    ) VALUES ( $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14 )RETURNING MAINID`;
+     const values = [id,author, name, picture, topic,description,meaning,longtitude,latitude, adcode,ename,price,ups,soldnum];
+          client.query(query, values, function(error, results)  {
+      
+            if (error) {
+              return console.error('Error executing query', error.stack);
+            }
+      
+            res.send(results.rows);
+            // Your callback logic here
+          });
+});
+
+
+const bodyParser = require('body-parser');
+
+// 使用 body-parser 中间件来解析请求体数据
+app.use(bodyParser.json());
+
+// POST 请求实现写入json文件的路由
+app.post('/saveData', (req, res) => {
+    const newData = req.body;
+
+    // 读取已有数据文件
+    fs.readFile('D:\\大三下资料\\GIS\\shanhaijing\\Fantastic-Creatures-of-the-Mountains-and-Seas\\xsy\\erchuangzuopin.json', 'utf-8', (err, data) => {
+        if (err) {
+            console.error('Error reading file:', err);
+            return res.status(500).json({ success: false, message: 'Failed to read existing data' });
+        }
+
+        let dataArray = [];
+        // 解析已有数据文件中的 JSON 数据
+        try {
+            dataArray = JSON.parse(data);
+        } catch (parseError) {
+            console.error('Error parsing JSON:', parseError);
+            return res.status(500).json({ success: false, message: 'Failed to parse existing data' });
+        }
+
+        // 计算新数据的ID为已有数据中最大ID值加1
+        const maxId = Math.max(...dataArray.map(item => item.idmain));
+        const newId = maxId + 1;
+
+        // 构造要写入 JSON 文件的数据对象
+        const jsonData = {
+            idmain: newId,
+            id: newData.id,
+            发布者ID: newData.author, // 请根据实际情况替换为真实的发布者ID
+            作品名称: newData.name,
+            作品图片的存储路径: newData.picture,
+            主题: newData.category,
+            作品简单描述: newData.description,
+            寓意: newData.meaning,
+            经度: newData.longtitude,
+            纬度: newData.latitude,
+            地理编码: newData.adcode,
+            地区: newData.ename,
+            价格: newData.price,
+            点赞数: newData.ups,
+            销量: newData.soldnum
+        };
+
+        // 将新数据追加到数组中
+        dataArray.push(jsonData);
+
+        // 将更新后的数据写回文件
+        fs.writeFile('D:\\大三下资料\\GIS\\shanhaijing\\Fantastic-Creatures-of-the-Mountains-and-Seas\\xsy\\erchuangzuopin.json', JSON.stringify(dataArray, null, 2), 'utf-8', (writeErr) => {
+            if (writeErr) {
+                console.error('Error writing file:', writeErr);
+                return res.status(500).json({ success: false, message: 'Failed to write updated data' });
+            }
+            
+            // 如果一切顺利，返回成功响应
+            res.json({ success: true, message: 'Data saved successfully' });
+        });
+    });
+});
+
+
+// POST 请求实现写入json文件的路由
+app.post('/savetiezi', (req, res) => {
+    const newData = req.body;
+
+    // 读取已有数据文件
+    fs.readFile('D:\\大三下资料\\GIS\\shanhaijing\\Fantastic-Creatures-of-the-Mountains-and-Seas\\xsy\\huati.json', 'utf-8', (err, data) => {
+        if (err) {
+            console.error('Error reading file:', err);
+            return res.status(500).json({ success: false, message: 'Failed to read existing data' });
+        }
+
+        let dataArray = [];
+        // 解析已有数据文件中的 JSON 数据
+        try {
+            dataArray = JSON.parse(data);
+        } catch (parseError) {
+            console.error('Error parsing JSON:', parseError);
+            return res.status(500).json({ success: false, message: 'Failed to parse existing data' });
+        }
+
+        // 计算新数据的ID为已有数据中最大ID值加1
+        const maxId = Math.max(...dataArray.map(item => item.id));
+        const newId = maxId + 1;
+
+        // 构造要写入 JSON 文件的数据对象
+        const jsonData = {
+            id: newId,
+            author: newData.author,
+            image: newData.image, // 请根据实际情况替换为真实的发布者ID
+            summary: newData.summary,
+            topic_overview: newData.topic_overview,
+            description: newData.description,
+            likes: newData.likes,
+            publish_time: newData.publish_time,
+            answers: newData.answers,
+            views: newData.views
+        };
+
+        // 将新数据追加到数组中
+        dataArray.push(jsonData);
+
+        // 将更新后的数据写回文件
+        fs.writeFile('D:\\大三下资料\\GIS\\shanhaijing\\Fantastic-Creatures-of-the-Mountains-and-Seas\\xsy\\huati.json', JSON.stringify(dataArray, null, 2), 'utf-8', (writeErr) => {
+            if (writeErr) {
+                console.error('Error writing file:', writeErr);
+                return res.status(500).json({ success: false, message: 'Failed to write updated data' });
+            }
+            
+            // 如果一切顺利，返回成功响应
+            res.json({ success: true, message: 'Data saved successfully' });
+        });
+    });
+});

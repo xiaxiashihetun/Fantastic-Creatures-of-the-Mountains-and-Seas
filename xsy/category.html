@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="title" content="Ask online Form">
+    <meta name="description" content="The Ask is a bootstrap design help desk, support forum website template coded and designed with bootstrap Design, Bootstrap, HTML5 and CSS. Ask ideal for wiki sites, knowledge base sites, support forum sites">
+    <meta name="keywords" content="HTML, CSS, JavaScript,Bootstrap,js,Forum,webstagram ,webdesign ,website ,web ,webdesigner ,webdevelopment">
+    <meta name="robots" content="index, nofollow">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="language" content="English">
+    <link href="css/bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <link href="css/editor.css" rel="stylesheet" type="text/css">
+   <!-- <link href="css/animate.css" rel="stylesheet" type="text/css"> -->
+    <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css"> </head>
+
+<body style="background-color: #78421228;">
+    <!--======== Navbar =======-->
+    <div class="container-top">
+        <div class="navbar-top">
+          
+            <nav>
+                <ul>
+                <li class="dropdown-top">
+                    <a href="../home.html" class="nav_text_big">首页</a>
+                </li>
+                <li class="dropdown-top">
+                    <a href="../basis/index.html" class="nav_text_big">古观山海</a>
+                </li>
+                <li class="dropdown-top">
+                    <a href="../html/WalkIn.html" class="nav_text_big">云游山海</a>
+                </li>
+                <li>
+                  <a href="../html/periphery.html" class="nav_text_big">山海足迹</a>
+                </li>
+                <li>
+                  <a href="../html/产业概览.html" class="nav_text_big">登录</a>
+                </li>
+    
+                </ul>
+              </nav>
+              <a href="../html/logIn.html">
+                <img src="../img/登录.png" class="menu-icon-top shopcar"/>
+              </a> 
+              <a href="../html/购物车.html">
+                  <img src="../img/_购物车.png" class="menu-icon-top shopcar"/>
+              </a> 
+
+        </div>
+      </div>
+    
+    <!--    breadcumb of category -->
+    <section class="header-descriptin329">
+        <div class="container">
+            <h3>山海论坛</h3>
+            <ol class="breadcrumb breadcrumb839">
+                <li><a href="#">首页</a></li>
+                <li class="active">山海论坛</li>
+            </ol>
+        </div>
+    </section>
+    <!--    body content-->
+    <section class="main-content920">
+        <div class="container">
+            <div class="row">
+               
+
+                <div class="col-md-9">
+                    <section class="category2781" id="question-section"></section>
+                    <div class="comment289-box">
+                        <h3>发布您的帖子</h3>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="replay-input-name42389">
+                                    <p>用户id*</p>
+                                    <input type="text" class="name-box24894 input238-design" id="enterauthor_tiezi" placeholder="您的id"> </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="replay-email-input89298">
+                                    <p>邮箱*</p>
+                                    <input type="text" class="name-box24894 input238-design" placeholder="您的邮箱（方便我们联系您）"> </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="replay-input-websit128923">
+                                    <p>标题*</p>
+                                    <input type="text" class="name-box24894 input238-design" id="heading"  placeholder="输入简短的标题"> </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="post9320-box">
+                                    <div class="button-group-addfile3239">
+                                        <span class="form-description239931">图片*</span><input type="file" name="ffile" class="question-ttile3226" id='upload_tiezi' onchange="getFile(value)">  
+                                    </div>
+                                    <input type="text" class="comment-input219882" id="entertopic" placeholder="输入一句话的简单描述"> </div>
+                                    <div class="post9320-box">
+                                        <input type="text" class="comment-input219882" id="description_tiezi" placeholder="输入您的详细描述"> </div>
+                                <button type="button" class="pos393-submit"id="tiezitojson" onclick="alert('帖子上传成功，感谢您的参与！')">发布帖子</button>
+                            </div>
+                           
+                        </div>
+                    </div>
+
+
+                    
+                </div>
+
+
+
+                <script>
+                    function getFile(value){
+                       // 获取上传控件dom
+                       var picname = document.getElementById('upload_tiezi').files[0].name;
+                       // 获取文件路径
+                       console.log(name);
+                   }
+                   </script>        
+               
+<script>
+// 定义 record_id 函数在循环外部
+function record_id(id){
+    localStorage.setItem('question_id', id);
+    window.location.href = `question_${id}.html`; // 使用传入的 id
+}
+
+
+document.addEventListener('DOMContentLoaded', loadQuestions);
+
+// let question_id = null; // 声明一个外部变量来存储 question_id
+
+                    async function loadQuestions() {
+                        try {
+                            const response = await fetch('huati.json');
+                            const questions = await response.json();
+                
+                            const questionSection = document.getElementById('question-section');
+                
+                            questions.forEach(question => {
+    const questionDiv = document.createElement('div');
+    questionDiv.className = 'question-type2033';
+
+
+    const rowDiv = document.createElement('div');
+    rowDiv.className = 'row';
+
+    // Left section
+    const leftColDiv = document.createElement('div');
+    leftColDiv.className = 'col-md-1';
+    const leftUserDiv = document.createElement('div');
+    leftUserDiv.className = 'left-user12923 left-user12923-repeat';
+    const userImage = document.createElement('img');
+    userImage.src = `image/huati/${question.image}`;
+    userImage.alt = 'image';
+    const checkIcon = document.createElement('i');
+    checkIcon.className = 'fa fa-check';
+    const checkLink = document.createElement('a');
+    checkLink.href = `question_${question.id}.html`; // Link modified
+    const checkIconContainer = document.createElement('div');
+    checkIconContainer.appendChild(checkIcon);
+    checkLink.appendChild(checkIconContainer);
+    leftUserDiv.appendChild(userImage);
+    leftUserDiv.appendChild(checkLink);
+    leftColDiv.appendChild(leftUserDiv);
+
+    // Middle section
+    const middleColDiv = document.createElement('div');
+    middleColDiv.className = 'col-md-9';
+    const rightDescriptionDiv = document.createElement('div');
+    rightDescriptionDiv.className = 'right-description893';
+    const queHeaderDiv = document.createElement('div');
+    queHeaderDiv.id = 'que-hedder2983';
+    const queHeaderLink = document.createElement('a');
+    if(question.id<=4)
+    {
+        queHeaderLink.href =  `question_${question.id}.html`;// Link modified
+        // 添加点击事件监听器
+    queHeaderLink.addEventListener('click', function() {
+            });
+    }
+    else{ queHeaderLink.href =  `question_new.html`;}
+                // 添加点击事件监听器
+                queHeaderLink.addEventListener('click', function() {
+                record_id(question.id);
+            });
+
+    
+    const questionTitle = document.createElement('h3');
+    const questionTitleLink = document.createElement('a');
+    // questionTitleLink.href = `question_${question.id}.html`; // Link modified
+
+    if(question.id<=4)
+    {
+        questionTitleLink.href =  `question_${question.id}.html`;// Link modified
+    }
+    else{ questionTitleLink.href =  `question_new.html`;}
+
+
+    questionTitleLink.textContent = question.topic_overview;
+    questionTitle.appendChild(questionTitleLink);
+    queHeaderLink.appendChild(questionTitle);
+    queHeaderDiv.appendChild(queHeaderLink);
+    const quesDetailsDiv = document.createElement('div');
+    quesDetailsDiv.className = 'ques-details10018';
+    const quesDetailsP = document.createElement('p');
+    quesDetailsP.textContent = question.description;
+    quesDetailsDiv.appendChild(quesDetailsP);
+    const hrElement = document.createElement('hr');
+    const quesIconInfoDiv = document.createElement('div');
+    quesIconInfoDiv.className = 'ques-icon-info3293';
+    const likesLink = document.createElement('a');
+    const likesIcon = document.createElement('i');
+    likesIcon.className = 'fa fa-star';
+    likesIcon.textContent = ` ${question.likes} `;
+    likesLink.appendChild(likesIcon);
+    quesIconInfoDiv.appendChild(likesLink);
+    const answersLink = document.createElement('a');
+    const answersIcon = document.createElement('i');
+    answersIcon.className = 'fa fa-comment';
+    answersIcon.textContent = ` 回答提问`;
+    answersLink.appendChild(answersIcon);
+    quesIconInfoDiv.appendChild(answersLink);
+    const viewsLink = document.createElement('a');
+    const viewsIcon = document.createElement('i');
+    viewsIcon.className = 'fa fa-user-circle-o';
+    viewsIcon.textContent = ` 浏览回答`;
+    viewsLink.appendChild(viewsIcon);
+    quesIconInfoDiv.appendChild(viewsLink);
+    const publishTimeLink = document.createElement('a');
+    const publishTimeIcon = document.createElement('i');
+    publishTimeIcon.className = 'fa fa-clock-o';
+    publishTimeIcon.textContent = ` ${question.publish_time}`;
+    publishTimeLink.appendChild(publishTimeIcon);
+    quesIconInfoDiv.appendChild(publishTimeLink);
+    rightDescriptionDiv.appendChild(queHeaderDiv);
+    rightDescriptionDiv.appendChild(quesDetailsDiv);
+    rightDescriptionDiv.appendChild(hrElement);
+    rightDescriptionDiv.appendChild(quesIconInfoDiv);
+    middleColDiv.appendChild(rightDescriptionDiv);
+
+    // Right section
+    const rightColDiv = document.createElement('div');
+    rightColDiv.className = 'col-md-2';
+    const quesTypeDiv = document.createElement('div');
+    quesTypeDiv.className = 'ques-type302';
+    const commentLink = document.createElement('a');
+    commentLink.href = `question_${question.question_id}.html`; // Link modified
+    const commentButton = document.createElement('button');
+    commentButton.type = 'button';
+    commentButton.className = 'q-type238';
+    const commentIcon = document.createElement('i');
+    commentIcon.className = 'fa fa-comment';
+    commentIcon.textContent = ` ${question.answers} 回答提问`;
+    commentButton.appendChild(commentIcon);
+    commentLink.appendChild(commentButton);
+    quesTypeDiv.appendChild(commentLink);
+    const viewLink = document.createElement('a');
+    viewLink.href = `question_${question.question_id}.html`; // Link modified
+    const viewButton = document.createElement('button');
+    viewButton.type = 'button';
+    viewButton.className = 'q-type23 button-ques2973';
+    const viewIcon = document.createElement('i');
+    viewIcon.className = 'fa fa-user-circle-o';
+    viewIcon.textContent = ` ${question.views} 浏览回答`;
+    viewButton.appendChild(viewIcon);
+    viewLink.appendChild(viewButton);
+    quesTypeDiv.appendChild(viewLink);
+    rightColDiv.appendChild(quesTypeDiv);
+
+    rowDiv.appendChild(leftColDiv);
+    rowDiv.appendChild(middleColDiv);
+    rowDiv.appendChild(rightColDiv);
+
+    questionDiv.appendChild(rowDiv);
+    questionSection.appendChild(questionDiv);
+});                          
+                        } catch (error) {
+                            console.error('Error loading questions:', error);
+                        }
+                    }
+                
+                    // document.addEventListener('DOMContentLoaded', loadQuestions);
+                </script>                
+
+
+
+                <!-- end of col-md-9 -->
+
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+                <script src="js/jquery-3.1.1.min.js"></script>
+                <script src="js/bootstrap.min.js"></script>
+                <script type="text/javascript" src="./js/getUrlParam.js"></script> 
+
+<script>
+$(document).ready(function () {
+    // 在这里执行你的逻辑
+    $("#tiezitojson").click(function () {
+        var author = $("#enterauthor_tiezi").val();
+        var picturePath = $("#upload_tiezi").val();
+        var image = picturePath.split(/[\\\/]/).pop();
+        var summary = $("#heading").val();
+        var topic_overview = $("#entertopic").val(); 
+        var description_tiezi = $("#description_tiezi").val();
+        var likes =0;
+        var publish_time ="几秒前";
+        var answers = 0;
+        var views = 0;
+        // 构建要写入文件的数据对象
+        var newData = {
+            author: author, image: image, summary:summary, topic_overview: topic_overview, description: description_tiezi, likes: likes, publish_time: publish_time, answers: answers, views: views
+        };
+
+        $.ajax({
+            url: 'http://localhost:5500/savetiezi',
+            type: 'post',
+            contentType: 'application/json',
+            data: JSON.stringify(newData),
+            success: function (response) {
+                console.log(response);
+                // 上传成功后刷新页面
+                location.reload();
+            }
+        });
+    });
+});
+
+
+</script>
+
+
+
+                <!--strart col-md-3 (side bar)-->
+                <aside class="col-md-3 sidebar97239">
+                    <div class="status-part3821">
+                   <h4>山海社区</h4>
+                       
+                        <a href="./shangchuanzuopin.html"><i class="fa fa-question-circle" aria-hidden="true"> 上传作品</i></a>
+                        <a href="./category.html"><i class="fa fa-question-circle" aria-hidden="true"> 山海论坛</i></a>
+                    </div>  
+                    <div class="categori-part329">
+                        <h4>云游山海</h4>
+                        <ul>
+                            <li><a href="../html/WalkIn.html">《东山经》之山海</a></li>
+                            <li><a href="../html/WalkIn.html">《南山经》之山海</a></li>
+                            <li><a href="../html/WalkIn.html">《西山经》之山海</a></li>
+                            <li><a href="../html/WalkIn.html">《北山经》之山海</a></li>
+                            <li><a href="../html/WalkIn.html">《中山经》之山海</a></li>
+                            
+                        </ul>
+                    </div>
+       
+                    <div class="social-part2189">
+                       <h4>最新作品</h4>
+                       <ul id="item-list_tiezi"></ul>
+                     </div>
+       
+                     <script>
+                       // Function to load and display items from the JSON file
+                       async function loadItems() {
+                         try {
+                           const response = await fetch('erchuangzuopin.json'); // Fetch the JSON file
+                           const items = await response.json(); // Parse the JSON
+                     
+                           // Get the item list element
+                           const itemList = document.getElementById('item-list_tiezi');
+                     
+                           // Reverse the items array to display from last to first and take the first 4 items
+                           const latestItems = items.slice().reverse().slice(0, 4);
+                     
+                           // Loop through the items and create the list elements
+                           latestItems.forEach(item => {
+                             // Create a list item element
+                             const listItem = document.createElement('li');
+                             listItem.className = 'rss-one';
+                             listItem.setAttribute('onclick', `go_to_item(${item.id}, 0)`);
+                     
+                             // Create a strong element to hold the item details
+                             const strong = document.createElement('strong');
+                     
+                             // Create a span element for the item name
+                             const span = document.createElement('span');
+                             span.textContent = item.作品名称;
+                     
+                             // Create a small element for the description
+                             const small = document.createElement('small');
+                             small.textContent = `寓意："${item.寓意}"，发布者ID：${item.发布者ID}`;
+                     
+                             // Append the span and small elements to the strong element
+                             strong.appendChild(span);
+                             strong.appendChild(document.createElement('br'));
+                             strong.appendChild(small);
+                     
+                             // Append the strong element to the list item
+                             listItem.appendChild(strong);
+                     
+                             // Append the list item to the item list
+                             itemList.appendChild(listItem);
+                           });
+                         } catch (error) {
+                           console.error('Error loading items:', error);
+                         }
+                       }
+                     
+                       // Call the function to load items when the page loads
+                       document.addEventListener('DOMContentLoaded', loadItems);
+                     </script>
+                       
+        <!--              login part-->
+        <div class="login-part2389">
+           <h4>登录</h4>
+           <div class="input-group300">
+           <span><i class="fa fa-user" aria-hidden="true"></i></span>
+           <input type="text" class="namein309" placeholder="输入用户名">
+           </div>
+               <div class="input-group300">
+           <span><i class="fa fa-lock" aria-hidden="true"></i></span>
+           <input type="password" class="passin309" placeholder="输入密码">
+           </div>
+           <a href="#"><button type="button" class="userlogin320">登录</button></a>
+           <div class="rememberme">
+                         <label><input type="checkbox" checked="checked"> 记住我</label>
+                         <a href="#" class="resbutton3892">注册</a>
+                     </div>
+       </div>
+       
+                 
+                  </aside>
+            </div>
+        </div>
+    </section>
+    <!--    footer -->
+    <div class="footer-search">
+        <div class="container">
+            <div class="row">
+                <div id="custom-search-input">
+                    <div class="input-group col-md-12"> <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                        <input type="text" class="  search-query form-control user-control30" placeholder="在这里搜索...." /> <span class="input-group-btn">
+                                    <button class="btn btn-danger" type="button">
+                                        <span class=" glyphicon glyphicon-search"></span> </button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <section class="footer-part">
+        <div class="container">
+            <div class="row">
+                
+                <div class="col-md-3">
+                  <div class="info-part-one320">
+                   <h4>基本信息</h4>
+                    <p>武汉大学遥感信息工程学院《网络GIS实习》第一组</p>
+                    <h4>地址 :</h4>
+                    <p>湖北省武汉市珞喻路129号武汉大学信息学部 教学实验大楼3楼、6楼—9楼,五号教学楼,宇航科学与技术研究院</p>
+                    <h4>联系方式</h4>
+                    <p>电话号码: 18986197481</p>
+                    <p>邮箱账号 : </p>
+                    <p>2021302191847@whu.edu.cn</p>
+                    </div>
+                </div>
+                   <div class="col-md-3">
+                  <div class="info-part-two320">
+              <h4>快速链接</h4>
+                   <a href="../html/WalkIn.html"><p>-主页</p></a>
+                     <a href="#"><p>-苗绣社区</p></a>
+                     <a href="#"><p>-苗绣商城</p></a>
+                     <a href="../html/周边推荐2.html"><p>-周边推荐</p></a>
+                     <a href="#"><p>-产业概览</p></a>
+                     <a href="shangchuanzuopin.html"><p>-作品上传</p></a>
+                     <a href="category.html"><p>-苗绣论坛</p></a>
+                    </div>
+                </div>
+                   <div class="col-md-3">
+                  <div class="info-part-three320">
+                   <h4>人气作品</h4>
+                  <div class="news-info209">
+                  
+                   <h5>绉绣双肩包（“花溪”）</h5>
+                    <p>这幅苗绣作品，凝聚了艺术家卓越的绣艺技巧与独到的创意思维...</p> 
+                    <small>2017-7-16</small>
+                      </div>
+                       <div class="news-info209">
+                <h5>破线绣毛衣（“花溪”）</h5>
+                    <p>艺术家精湛地运用苗绣传统工艺，将古老的手工技艺与现代审美巧妙融合 ...</p>
+                    <small>2019-7-9</small>
+                      </div>
+                        <div class="news-info209">
+                <h5>辫绣手提包（“锦绣黔坤”）</h5>
+                    <p>苗绣作品展现了艺术家对大自然的独到感悟，细致入微的绣工勾勒出山水...</p>
+                    <small>2023-12-29</small>
+                      </div>
+                    
+                    </div>
+                </div>
+                   <div class="col-md-3">
+                  <div class="info-part-four320">
+                   <h4>苗绣论坛</h4>
+                   <div class="tweet-details29">
+                    <h5>苗绣初体验</h5>
+                    <p><i class="fa fa-twitter-square" aria-hidden="true"></i><a href="post-deatils.html"> 苗绣，宛如大地的绚烂花开，细腻而瑰丽，它是苗族文化的精髓 ...</a></p>
+                   
+                      </div>
+                            <div class="tweet-details29">
+                    <h5>苗绣非遗</h5>
+                    <p><i class="fa fa-twitter-square" aria-hidden="true"></i><a href="miaoxiufeiyi.html">苗族刺绣技艺进入首批国家级保护的非遗保护名录 ...</a></p>
+                  
+                      </div>
+                            <div class="tweet-details29">
+                    <h5>苗绣潮牌</h5>
+                    <p><i class="fa fa-twitter-square" aria-hidden="true"></i><a href="miaoxiuchaopai.html">走进苗族聚居的贵州，世世代代的苗族人，用绣在服饰上的符号和图案...</a></p>
+                     
+                      </div>
+                      <div class="tweet-details29">
+                        <h5>苗绣体验</h5>
+                        <p><i class="fa fa-twitter-square" aria-hidden="true"></i><a href="miaoxiutiyan.html">近年来，贵州多地因地制宜，利用自身独特的地理景观...</a></p>
+                       
+                          </div>
+                      <div class="tweet-details29">
+                      <h5>苗绣伴手礼</h5>
+                      <p><i class="fa fa-twitter-square" aria-hidden="true"></i><a href="miaoxiubanshouli.html">在每个美好的时刻，我想将一份独特的礼物送给你...</a></p>
+                     
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+<section class="footer-social">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <p>Copyright 2023 苗绣 | <strong>《网络GIS实习》第一组</strong></p>
+            </div>
+             <div class="col-md-6">
+              <div class="social-right2389">
+               <a href="#"><i class="fa fa-twitter-square" aria-hidden="true"></i></a>
+               <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+               <a href="#"><i class="fa fa-google-plus" aria-hidden="true"></i></a>
+               <a href="#"><i class="fa fa-youtube" aria-hidden="true"></i></a>
+               <a href="#"><i class="fa fa-skype" aria-hidden="true"></i></a>
+               <a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+               <a href="#"><i class="fa fa-rss" aria-hidden="true"></i></a>
+                 </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+    <script>
+        $(document).ready(function () {
+            $("#txtEditor").Editor();
+        });
+    </script>
+</body>
+
+</html>
