@@ -861,7 +861,7 @@ if (elements.length > 0) {
     console.log('No elements found with class "active2".');  
 }
   if(id=="shan"){
-    map.scene.globe.terrainExaggeration = 13 // 修改地形夸张程度
+    //map.scene.globe.terrainExaggeration = 13 // 修改地形夸张程度
     LoadMounts(data);
     if(data == "东山一经"){
     mapSetViewList_East();
@@ -881,6 +881,14 @@ if (elements.length > 0) {
     LoadCountry('海外南经');
     mapSetViewList_country();
     }
+  }
+}
+
+function chage_terrain(type){
+  if(type == 1){
+    map.scene.globe.terrainExaggeration = 13
+  }else{
+    map.scene.globe.terrainExaggeration = 1
   }
 }
 

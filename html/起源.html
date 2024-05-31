@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>植物</title>
+    <title>起源</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -35,7 +35,7 @@
             color: black;
             display: block;
             transition: 0.3s;
-            background-image: url('./img/故事地图/按钮.png'); /* 设置背景图片 */
+            background-image: url('../img/故事地图/按钮.png'); /* 设置背景图片 */
             background-size: cover; /*让背景图片充满整个项目 */
         }
         .sidebar a:hover {
@@ -123,7 +123,7 @@
 
 <div class="main-content">
     <div class="iframe-container">
-        <iframe src="https://storymaps.arcgis.com/stories/102d8d3b073c477c98a4e5a56894bab2" allowfullscreen allow="geolocation"></iframe>
+        <iframe src="https://storymaps.arcgis.com/stories/60c231f055614b73b2f93caaa073bd2e" allowfullscreen allow="geolocation"></iframe>
         <div class="overlay"></div>
         <div class="scrollbar-cover"></div>
     </div>
@@ -131,7 +131,7 @@
 
 <script>
     function redirectToPage() {
-        window.location.href = 'home.html'; 
+        window.location.href = '../index.html'; 
     }
     function toggleSidebar() {
         document.body.classList.toggle('closed');

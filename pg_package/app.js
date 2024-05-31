@@ -1,7 +1,7 @@
 const express = require('express');
 const { Client } = require('pg');    //引入express和pg框架
 const connectionString = 'postgres://postgres:123456@172.20.10.2:5432/ShanHaiJing';
-
+const path = require('path');
 const client = new Client({
     connectionString: connectionString
 });
@@ -157,6 +157,37 @@ app.get('/load_country', function (req, res,next) {
         
         const item_Data = result.rows;
         console.log("load_country");
+        res.status(200).json(item_Data);
+    });
+});
+
+
+app.use(express.static(path.join(__dirname, 'public')));
+app.use('../img', express.static(path.join(__dirname, 'img')));
+
+// 路由，处理前端请求
+// app.get('/get_routes', async (req, res) => {
+//     const city = req.query.city;
+//     try {
+//         const result = await pool.query('SELECT * FROM 旅游路线 WHERE 所属地级市 = $1 ORDER BY 路线序号, 顺序', [city]);
+//         res.json(result.rows);
+//         console.log("旅游");
+//     } catch (err) {
+//         console.error(err);
+//         res.status(500).json({ error: 'Database query failed' });
+//     }
+// });
+
+app.get('/get_routes', function (req, res,next) {
+    res.setHeader('Access-Control-Allow-Origin','*');
+    var type=req.query.city;
+    client.query('SELECT * FROM 旅游路线 where 所属地级市 = $1;', [type],function (err, result) {      
+        if (err) {
+            console.log(err);
+            return res.status(400).send(err);
+        }
+        const item_Data = result.rows;
+        console.log("旅游");
         res.status(200).json(item_Data);
     });
 });

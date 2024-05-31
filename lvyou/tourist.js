@@ -25,17 +25,35 @@ map.setDisplayOptions({
     skyColors: ['rgba(159, 145, 107, 0)', 'rgba(159, 145, 107, 0.5)']
 });
 
+// function fetchRoutes(city) {
+//     fetch(`http://172.20.10.2:9936/get_routes?city=${encodeURIComponent(city)}`)
+//         .then(response => response.json())
+//         .then(data => {
+//             map.clearOverlays();
+//             drawRoutes(data);
+//             // 设置地图为三维效果
+//             map.setHeading(64.5);
+//             map.setTilt(73);
+//         })
+//         .catch(error => console.error('Error:', error));
+// }
+
 function fetchRoutes(city) {
-    fetch(`/get_routes?city=${encodeURIComponent(city)}`)
-        .then(response => response.json())
-        .then(data => {
+    $.ajax({
+        url: 'http://172.20.10.2:9936/get_routes',
+        type: 'get',
+        dataType: 'json',
+        data: {//传进去的
+            city:city
+        }, // Pass the parameter here
+        success: function (data) {//返回结果在data里 数据返回成功之后要干什么
+            
             map.clearOverlays();
             drawRoutes(data);
-            // 设置地图为三维效果
             map.setHeading(64.5);
             map.setTilt(73);
-        })
-        .catch(error => console.error('Error:', error));
+        }
+      });
 }
 
 function adjustMapViewport(points) {
