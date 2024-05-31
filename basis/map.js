@@ -139,7 +139,7 @@ function LoadMounts(mount_type){
 function LoadCountry(country_type){
   //removeLayer()
   //removeLayer()
-  map.scene.globe.terrainExaggeration = 1 // 修改地形夸张程度
+  //map.scene.globe.terrainExaggeration = 1 // 修改地形夸张程度
   graphicLayer.clear()
   if(my_switch==true){
       $.ajax({
@@ -206,7 +206,7 @@ function add_country(item) {
       }
     ],
     //center: { lat: 31.251138, lng: 121.463588, alt: 1729.97, heading: 110.7, pitch: -25, roll: 0.2 },
-    popup: "上海浦东模型",
+    popup: item.名字,
     //flyTo: true
   })
   map.addLayer(graphicLayer_3d)
@@ -301,19 +301,21 @@ $("#jd").text("现代解读");
   $("#fy").html(item.翻译);
   var xdjd = `<p class="xdjd">`+item.现代解读+`</p>`;
   $("#yishoubox").html(xdjd);
-  var bd_map = new BMapGL.Map("map");                // 创建地图实例
-  lng = parseFloat(item.经度);
-  lat = parseFloat(item.纬度);
-  var point = new BMapGL.Point(lng, lat); 
-  var marker = new BMapGL.Marker(point);        // 创建标注   
-  bd_map.addOverlay(marker);   
-  bd_map.centerAndZoom(point, 5);                      // 设置地图级别
-  bd_map.enableScrollWheelZoom(true); 
-  bd_map.setMapStyleV2({     
-    styleId: '6e33d976c728aa940a5926779afb5000'
-  });
+  // var bd_map = new BMapGL.Map("map");                // 创建地图实例
+  // lng = parseFloat(item.经度);
+  // lat = parseFloat(item.纬度);
+  // var point = new BMapGL.Point(lng, lat); 
+  // var marker = new BMapGL.Marker(point);        // 创建标注   
+  // bd_map.addOverlay(marker);   
+  // bd_map.centerAndZoom(point, 5);                      // 设置地图级别
+  // bd_map.enableScrollWheelZoom(true); 
+  // bd_map.setMapStyleV2({     
+  //   styleId: '6e33d976c728aa940a5926779afb5000'
+  // });
+  var country_img = `<img src=../img/国家/`+item.id+`.png class = "country_img">`;
+  $("#map").html(country_img);
   $("#info").slideDown("slow");
-  
+
   var element = document.getElementsByClassName('bottom-container')[0];  
   if (element) {  
       element.style.right = "80%";  
@@ -531,6 +533,7 @@ function addInfo(){
   // 隐藏 id 为 "info" 的 div，并设置新的 HTML 内容
   $("#info").hide();
   $(".jieshao").hide();
+
   $("#shunxu").html(mountinfo.顺序介绍);
   var mount_class = "——《"+mountinfo.所属山系+"》";
   $("#Mount_class").html(mount_class);
@@ -539,6 +542,9 @@ function addInfo(){
   $("#feature").html(mountinfo.特征);
   $("#yw").html(mountinfo.原文);
   $("#fy").html(mountinfo.翻译);
+  $("#last").show();
+  $("#next").show();
+  $("#shunxu").show();
   var bd_map = new BMapGL.Map("map");                // 创建地图实例
   lng = parseFloat(mountinfo.经度);
   lat = parseFloat(mountinfo.纬度);
@@ -855,6 +861,7 @@ if (elements.length > 0) {
     console.log('No elements found with class "active2".');  
 }
   if(id=="shan"){
+    map.scene.globe.terrainExaggeration = 13 // 修改地形夸张程度
     LoadMounts(data);
     if(data == "东山一经"){
     mapSetViewList_East();
@@ -869,12 +876,17 @@ if (elements.length > 0) {
     }
   } 
   else if(id=="guo"){
+    map.scene.globe.terrainExaggeration = 1 // 修改地形夸张程度
     if(data == "南山一经"){
     LoadCountry('海外南经');
+    mapSetViewList_country();
     }
   }
 }
 
+function mapSetViewList_country(){
+  map.setCameraView({ lat:20.346768, lng: 115.125024, alt: 2374000, heading: 345, pitch: -66.4 })
+}
   // // 获取图片元素和提示框元素
   // var image = document.getElementById("last");
   // var tooltip = document.getElementById("last_tip");

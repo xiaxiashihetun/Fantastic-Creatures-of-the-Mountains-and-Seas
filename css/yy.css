@@ -108,7 +108,7 @@
 
   .search-form {  
     position: fixed;  
-    top: 0;  
+    top: 70px;  
     left: 0;  
     width: 50px; /* 初始宽度 */  
     height: 50px;  
@@ -217,7 +217,7 @@
   
 .dropdown-content {  
   position: fixed;  
-  top: 4%;  
+  top: 15%;  
   left: 0%;  
   display: flex;  
   flex-direction: column; /* 确保子元素竖直排列 */  
@@ -239,3 +239,6 @@
 .dropdown-content a:hover {  
   background-color: #e1d3c6;  
 }  
+.dropdown-content-item{
+  cursor: pointer;
+}

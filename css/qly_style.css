@@ -165,7 +165,8 @@
     margin-top: 1%;
     width:40%;
     height:300px;
-    /* border: 1px solid #999; */
+    border: 1px solid #999;
+    display: flex;
   }
   .text_box{
     /* border: 1px solid #999; */
@@ -197,4 +198,18 @@
 .xdjd{
     font-family:华文楷体;
     font-size: 180%;
+}
+
+.fixed-image {
+    position: fixed; /* 固定定位 */
+    top: 10px; /* 顶部边距为 0 */
+    left: 0; /* 左侧边距为 0 */
+    width:7%;
+    cursor: pointer;
+}
+
+.country_img{
+    width: 80%;
+    /* height: 350px; */
+    flex:1;
 }
