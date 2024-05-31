@@ -47,7 +47,8 @@
           <button type="submit"><i class="fa fa-search"></i></button>
       </div>  
     </form>
-
+    <div class="dropdown-content" id="xialakuang">
+    </div>
     <div id="info" class="my_infoview">
       <div class="container">
         <img src="../img/yishou/收起.png" alt="Your Image" class="shouqi">
@@ -76,7 +77,7 @@
             </div>
           </div>
             
-            <h2>奇珍异兽</h2> 
+            <h2 id="jd">奇珍异兽</h2> 
               <div id="yishoubox">
                 <div class='box_contain'>
                     <div class='pic_box' onclick="show_yishou()">
@@ -143,25 +144,34 @@
 
     <div class="huadong-container">  
       <div class="image-with-text">  
-        <img src="../img/3d_point/滑动图标1.png" class="graphic-image" alt="Graphic Image" width="30" height="30"  onclick="LoadMounts('东山一经');mapSetViewList_East()"/>  
+        <img src="../img/3d_point/滑动图标1.png" class="graphic-image" alt="Graphic Image" width="30" height="30"  onclick="MountOrCountry('东山一经')"/>  
         <div class="text-on-image">东</div>  
       </div>  
       <div class="image-with-text" >  
-        <img src="../img/3d_point/滑动图标2.png" class="graphic-image" alt="Graphic Image" width="10" height="10"  onclick="LoadMounts('西山一经')"/>  
+        <img src="../img/3d_point/滑动图标2.png" class="graphic-image" alt="Graphic Image" width="10" height="10"  onclick="MountOrCountry('西山一经')"/>  
         <div class="text-on-image">西</div>
       </div>  
       <div class="image-with-text">  
-        <img src="../img/3d_point/滑动图标2.png" class="graphic-image" alt="Graphic Image" width="10" height="10"  onclick="LoadMounts('南山一经')"/>  
+        <img src="../img/3d_point/滑动图标2.png" class="graphic-image" alt="Graphic Image" width="10" height="10"  onclick="MountOrCountry('南山一经')"/>  
         <div class="text-on-image">南</div>
       </div>
       <div class="image-with-text">  
-        <img src="../img/3d_point/滑动图标2.png" class="graphic-image" alt="Graphic Image" width="10" height="10"  onclick="LoadMounts('北山一经')"/>  
+        <img src="../img/3d_point/滑动图标2.png" class="graphic-image" alt="Graphic Image" width="10" height="10"  onclick="MountOrCountry('北山一经')"/>  
         <div class="text-on-image">北</div>
       </div>
       <div class="image-with-text">  
-        <img src="../img/3d_point/滑动图标2.png" class="graphic-image" alt="Graphic Image" width="10" height="10"  onclick="LoadMounts('中山一经')"/>  
+        <img src="../img/3d_point/滑动图标2.png" class="graphic-image" alt="Graphic Image" width="10" height="10"  onclick="MountOrCountry('中山一经')"/>  
         <div class="text-on-image">中</div>
       </div>
+    </div>
+
+    <div class="bottom-container">  
+      <div class="image-with-text2" id="shan">  
+        <img src="../img/3d_point/山.png" class="graphic-image" alt="Graphic Image" width="30" height="30"  onclick="LoadMounts('山');"/>    
+      </div>  
+      <div class="image-with-text2" id="guo" >  
+        <img src="../img/3d_point/滑动图标2.png" class="graphic-image" alt="Graphic Image" width="10" height="10"  onclick="LoadMounts('国')"/>  
+      </div>  
     </div>
     
     <script src="../js/common.js"></script>
