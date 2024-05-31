@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>植物</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        .sidebar {
+            height: 100%;
+            width: 250px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #F1E8D5;
+            padding-top: 20px;
+            transition: 0.3s;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* 将项目在侧边栏内居中对齐 */
+            justify-content: center;
+            z-index: 1000; /* 确保侧边栏位于覆盖层之上 */
+        }
+        .sidebar a {
+            padding: 46px 40px;
+            margin-bottom: 20px;
+            text-decoration: none;
+            font-size: 18px;
+            color: black;
+            display: block;
+            transition: 0.3s;
+            background-image: url('../img/故事地图/按钮.png'); /* 设置背景图片 */
+            background-size: cover; /*让背景图片充满整个项目 */
+        }
+        .sidebar a:hover {
+            background-color: #dfd5c2;
+        }
+        .main-content {
+            margin-left: 250px;
+            padding: 0;
+            transition: margin-left 0.3s;
+            position: relative;
+            z-index: 0; /* 确保主内容在最底层 */
+        }
+        .iframe-container {
+            position: relative;
+            width: 100%;
+            height: 1000px;
+            overflow: hidden; /* 隐藏滚动条 */
+        }
+        .iframe-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 10%;
+            background-color: #F9F6ED;
+            pointer-events: none; /* 使覆盖层不可点击，点击会穿透到iframe */
+            z-index: 500; /* 覆盖层的层级低于侧边栏和按钮 */
+        }
+        .scrollbar-cover {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 20px; /* 滚动条的宽度 */
+            background-color: #F9F6ED; /* 覆盖滚动条的颜色 */
+            z-index: 500; /* 覆盖层的层级低于侧边栏和按钮 */
+        }
+        .toggle-btn {
+            font-size: 18px;
+            cursor: pointer;
+            background-color: #AE6A1F;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            position: fixed;
+            top: 20px;
+            left: 220px;
+            transition: left 0.3s;
+            z-index: 1001; /* 确保按钮位于覆盖层之上 */
+        }
+        .closed .sidebar {
+            width: 0;
+        }
+        .closed .main-content {
+            margin-left: 0;
+        }
+        .closed .toggle-btn {
+            left: 20px;
+        }
+        #top-right-image {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 100px;
+            height: 50px;
+            cursor: pointer;
+            z-index: 1001;
+        }
+    </style>
+</head>
+<body>
+    <img src="../img/旅游图片/返回.png" id="top-right-image" alt="跳转图片" onclick="redirectToPage()">
+<div class="sidebar">
+    <button class="toggle-btn" onclick="toggleSidebar()">＜＜</button>
+    <a href="./起源.html">起源</a>
+    <a href="./神祇.html">神祇</a>
+    <a href="./异兽.html">异兽</a>
+    <a href="./植物.html">植物</a>
+</div>
+
+<div class="main-content">
+    <div class="iframe-container">
+        <iframe src="https://storymaps.arcgis.com/stories/102d8d3b073c477c98a4e5a56894bab2" allowfullscreen allow="geolocation"></iframe>
+        <div class="overlay"></div>
+        <div class="scrollbar-cover"></div>
+    </div>
+</div>
+
+<script>
+    function redirectToPage() {
+        window.location.href = '../index.html'; 
+    }
+    function toggleSidebar() {
+        document.body.classList.toggle('closed');
+        const btn = document.querySelector('.toggle-btn');
+        if (document.body.classList.contains('closed')) {
+            btn.textContent = '☰ 菜单';
+        } else {
+            btn.textContent = '＜＜';
+        }
+    }
+</script>
+
+</body>
+</html>

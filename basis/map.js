@@ -2,7 +2,8 @@
 
 var map // mars3d.Map三维地图对象
 var graphicLayer // 矢量图层对象,放置山的点位
-var graphicLayer_info //div图层对象，放置山的介绍div
+var graphicLayer_3d 
+var tilesetLayer
 var eventTarget = new mars3d.BaseClass() // 事件对象，用于抛出事件到面板中
  
 // 需要覆盖config.json中地图属性参数（当前示例框架中自动处理合并）
@@ -38,14 +39,6 @@ function onMounted(mapInstance) {
   graphicLayer = new mars3d.layer.GraphicLayer()
   map.addLayer(graphicLayer)
 
-  graphicLayer_info = new mars3d.layer.GraphicLayer()
-  map.addLayer(graphicLayer_info)
-
-  graphicLayer_info.on(mars3d.EventType.click, function (event) {
-    // event.stopPropagation()
-    console.log("监听layer，单击了info对象", event)
-  })
-
   // 在layer上绑定监听事件
   graphicLayer.on(mars3d.EventType.click, function (event) {
     // event.stopPropagation()
@@ -67,60 +60,13 @@ function onUnmounted() {
   // graphicLayer = null
 }
 
- 
-
-function addDemoGraphic1(graphicLayer) {
-  const graphic = new mars3d.graphic.DivGraphic({
-    position: [116.741611, 31.408068, 75.5],
-    style: {
-      html: `<div class="marsBlackPanel  animation-spaceInDown">
-              <div class="marsBlackPanel-text">大湖名城,创新高地</div>
-          </div>`,
-      horizontalOrigin: Cesium.HorizontalOrigin.LEFT,
-      verticalOrigin: Cesium.VerticalOrigin.CENTER,
-      //distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 400000), // 按视距距离显示
-      //scaleByDistance:true,
-      clampToGround: false,//贴地显示
-      // 高亮时的样式
-      highlight: {
-        // type: mars3d.EventType.click,
-        className: "marsBlackPanel-highlight"
-      }
-    },
-    attr: { remark: "示例1" }
-  })
-  //graphicLayer.addGraphic(graphic)
-  graphic.addTo(graphicLayer_info)
+function removemodel() {
+  map.trackedEntity = null
+  if (graphicLayer_3d) {
+    map.removeLayer(graphicLayer_3d, true)
+    graphicLayer_3d = null
+  } 
 }
-
-
-function addDemoGraphic3(graphicLayer) {
-  const graphic = new mars3d.graphic.DivGraphic({
-    position: [116.960075, 31.19609, 237.4],
-    style: {
-      html: `<div class="marsGreenGradientPnl" >安徽欢迎您</div>`,
-      horizontalOrigin: Cesium.HorizontalOrigin.CENTER,
-      verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
-      scaleByDistance:true
-      // 高亮时的样式
-      // highlight: {
-      //   type: mars3d.EventType.click,
-      //   className: "marsGreenGradientPnl-highlight"
-      // }
-    },
-    attr: { remark: "示例3" }
-  })
-  //graphicLayer.addGraphic(graphic)
-  graphic.addTo(graphicLayer)
-  // 在指定时间范围显示对象 0-10，20-30,40-max
-  const now = map.clock.currentTime
-  graphic.availability = [
-    { start: now, stop: Cesium.JulianDate.addSeconds(now, 10, new Cesium.JulianDate()) },
-    { start: Cesium.JulianDate.addSeconds(now, 20, new Cesium.JulianDate()), stop: Cesium.JulianDate.addSeconds(now, 30, new Cesium.JulianDate()) },
-    { start: Cesium.JulianDate.addSeconds(now, 40, new Cesium.JulianDate()), stop: "2999-01-01 00:00:00" }
-  ]
-}
-
 
 function removeLayer() {
   if (graphicLayer) {
@@ -132,576 +78,25 @@ function removeLayer() {
     map.removeLayer(tilesetLayer, true)
     tilesetLayer = null
   }
-}
-
-/**
- * 点数据
- */
-function showPoint() {
-  removeLayer()
-
-  window._test_button_click = function (attr) {
-    globalAlert(JSON.stringify(attr), "测试查看详情")
+  if (graphicLayer_3d) {
+    map.removeLayer(graphicLayer_3d, true)
+    graphicLayer_3d = null
   }
-
-  graphicLayer = new mars3d.layer.GeoJsonLayer({
-    name: "体育设施点",
-    url: "//data.mars3d.cn/file/geojson/hfty-point.json",
-    symbol: {
-      styleOptions: {
-        image: "../img/marker/mark-red.png",
-        verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
-        scale: 1,
-        scaleByDistance: true,
-        scaleByDistance_far: 20000,
-        scaleByDistance_farValue: 0.5,
-        scaleByDistance_near: 1000,
-        scaleByDistance_nearValue: 1,
-        // setHeight: 5000, //指定高度
-        label: {
-          text: "{项目名称}",
-          font_size: 25,
-          color: "#ffffff",
-          outline: true,
-          outlineColor: "#000000",
-          pixelOffsetY: -25,
-          scaleByDistance: true,
-          scaleByDistance_far: 80000,
-          scaleByDistance_farValue: 0.5,
-          scaleByDistance_near: 1000,
-          scaleByDistance_nearValue: 1,
-          distanceDisplayCondition: true,
-          distanceDisplayCondition_far: 80000,
-          distanceDisplayCondition_near: 0
-        }
-      }
-    },
-    popup: [
-      { field: "项目名称", name: "项目名称" },
-      { field: "建设性质", name: "建设性质" },
-      { field: "设施级别", name: "设施级别" },
-      { field: "所属区县", name: "所属区县" },
-      { field: "建筑内容及", name: "建筑内容" },
-      { field: "新增用地（", name: "新增用地" },
-      { field: "开工", name: "开工" },
-      { field: "总投资（万", name: "总投资" },
-      { field: "资金来源", name: "资金来源" },
-      { field: "初步选址", name: "初步选址" },
-      { field: "设施类型", name: "设施类型" },
-      { field: "设施等级", name: "设施等级" },
-      { field: "所在区县", name: "所在区县" },
-      { field: "具体位置", name: "具体位置" },
-      { field: "建设内容（", name: "建设内容" },
-      { field: "用地面积（", name: "用地面积", format: "mars3d.MeasureUtil.formatArea" },
-      { field: "设施规模（", name: "设施规模" },
-      { field: "举办者类型", name: "举办者类型" },
-      { field: "开工时间", name: "开工时间" },
-      { field: "总投资额（", name: "总投资额", unit: "亿元" },
-      { field: "项目推进主", name: "项目推进主体" },
-      { field: "项目进度", name: "项目进度" },
-      { field: "项目来源", name: "项目来源" },
-      { field: "备注", name: "备注" },
-      { name: "详情", type: "button", className: "mars3d-popup-btn-custom", callback: "_test_button_click" }
-    ],
-    flyTo: true
-  })
-  map.addLayer(graphicLayer)
-
-  // 绑定事件
-  graphicLayer.on(mars3d.EventType.load, function (event) {
-    console.log("数据加载完成", event)
-  })
-  graphicLayer.on(mars3d.EventType.click, function (event) {
-    console.log("单击了图层", event)
-  })
 }
 
-/**
- * 全国省界
- */
-function showChinaLine() {
-  removeLayer()
 
-  graphicLayer = new mars3d.layer.GeoJsonLayer({
-    name: "全国省界",
-    url: "//data.mars3d.cn/file/geojson/areas/100000_full.json",
-    //url: "./json/ceshi_FeaturesToJSON.json",
-    format: simplifyGeoJSON, // 用于自定义处理geojson
-    symbol: {
-      type: "polylineP",
-      styleOptions: {
-        width: 2,
-        materialType: mars3d.MaterialType.LineFlow,
-        materialOptions: {
-          color: "#00ffff",
-          image: "img/textures/fence-line.png",
-          speed: 10,
-          repeat_x: 10
-          // image: "../img/textures/line-arrow-blue.png",
-          // color: "#1a9850",
-          // mixt: true,
-          // speed: 20,
-          // repeat: new Cesium.Cartesian2(5, 1)
-        },
-        distanceDisplayCondition: true,
-        distanceDisplayCondition_far: 12000000,
-        distanceDisplayCondition_near: 100000,
-        label: {
-          text: "{name}",
-          position: "{center}", // 省会位置center
-          font_size: 30,
-          color: "#ffffff",
-          outline: true,
-          outlineColor: "#000000",
-          scaleByDistance: true,
-          scaleByDistance_far: 60000000,
-          scaleByDistance_farValue: 0.2,
-          scaleByDistance_near: 1000000,
-          scaleByDistance_nearValue: 1,
-          distanceDisplayCondition: true,
-          distanceDisplayCondition_far: 10000000,
-          distanceDisplayCondition_near: 100000,
-          setHeight: 10000
-        }
-      }
-    },
-    flyTo: true
-  })
-  map.addLayer(graphicLayer)
-
-  // 绑定事件
-  graphicLayer.on(mars3d.EventType.load, function (event) {
-    console.log("数据加载完成", event)
-  })
-}
-
-// 简化geojson的坐标
-function simplifyGeoJSON(geojson) {
-  try {
-    geojson = turf.simplify(geojson, { tolerance: 0.0001, highQuality: true, mutate: true })
-  } catch (e) {
-    //
-  }
-  return geojson
-}
-
-/**
- * 显示合肥区域面
- */
-function showRegion() {
-  removeLayer()
-
-  graphicLayer = new mars3d.layer.GeoJsonLayer({
-    name: "合肥市",
-    //url: "//data.mars3d.cn/file/geojson/areas/340100_full.json",
-    url: "./json/hefei_FeaturesToJSON1.json",
-    symbol: {
-      styleOptions: {
-        fill: true,
-        randomColor: true, // 随机色
-        opacity: 0.3,
-        outline: true,
-        outlineStyle: {
-          color: "#FED976",
-          width: 3,
-          opacity: 1
-        },
-        // 高亮时的样式
-        highlight: {
-          opacity: 0.9,
-          outlineStyle: {
-            width: 6,
-            color: "#ff0000",
-            addHeight: 100
-          },
-          label: { show: true }
-        },
-        label: {
-          show: false,
-          // 面中心点，显示文字的配置
-          text: "{name}", // 对应的属性名称
-          opacity: 1,
-          font_size: 40,
-          color: "#ffffff",
-
-          font_family: "楷体",
-          outline: true,
-          outlineColor: "#000000",
-          outlineWidth: 3,
-
-          background: false,
-          backgroundColor: "#000000",
-          backgroundOpacity: 0.1,
-
-          font_weight: "normal",
-          font_style: "normal",
-
-          scaleByDistance: true,
-          scaleByDistance_far: 20000000,
-          scaleByDistance_farValue: 0.1,
-          scaleByDistance_near: 1000,
-          scaleByDistance_nearValue: 1,
-
-          distanceDisplayCondition: false,
-          distanceDisplayCondition_far: 10000,
-          distanceDisplayCondition_near: 0,
-          visibleDepth: false
-        }
-      }
-    },
-    popup: "{name}",
-    // "tooltip": "{name}",
-    flyTo: true
-  })
-  map.addLayer(graphicLayer)
-
-  // 绑定事件
-  graphicLayer.on(mars3d.EventType.load, function (event) {
-    console.log("数据加载完成", event)
-  })
-  graphicLayer.on(mars3d.EventType.click, function (event) {
-    console.log("单击了图层", event)
-  })
-}
-
-// 规划面
-function showPlanningSurface() {
-  removeLayer()
-
-  map.setCameraView({ lat: 31.591382, lng: 120.718945, alt: 784, heading: 279, pitch: -67 })
-
-  graphicLayer = new mars3d.layer.GeoJsonLayer({
-    id: 1987,
-    name: "用地规划",
-    // 1.支持URL
-    url: "//data.mars3d.cn/file/geojson/guihua.json",
-    // 2.也支持直接传入数据
-    // data: {
-    //   type: "FeatureCollection",
-    //   name: "用地规划",
-    //   features: [] //数据已省略，可以从上面guihua.json中复制
-    // },
-    symbol: {
-      type: "polygonC",
-      styleOptions: {
-        opacity: 0.6,
-        color: "#0000FF"
-      },
-      styleField: "类型",
-      styleFieldOptions: {
-        一类居住用地: { color: "#FFDF7F" },
-        二类居住用地: { color: "#FFFF00" },
-        社区服务用地: { color: "#FF6A38" },
-        幼托用地: { color: "#FF6A38" },
-        商住混合用地: { color: "#FF850A" },
-        行政办公用地: { color: "#FF00FF" },
-        文化设施用地: { color: "#FF00FF" },
-        小学用地: { color: "#FF7FFF" },
-        初中用地: { color: "#FF7FFF" },
-        体育场用地: { color: "#00A57C" },
-        医院用地: { color: "#A5527C" },
-        社会福利用地: { color: "#FF7F9F" },
-        商业用地: { color: "#FF0000" },
-        商务用地: { color: "#7F0000" },
-        营业网点用地: { color: "#FF7F7F" },
-        一类工业用地: { color: "#A57C52" },
-        社会停车场用地: { color: "#C0C0C0" },
-        通信用地: { color: "#007CA5" },
-        排水用地: { color: "#00BFFF" },
-        公园绿地: { color: "#00FF00" },
-        防护绿地: { color: "#007F00" },
-        河流水域: { color: "#7FFFFF" },
-        配建停车场: { color: "#ffffff" },
-        道路用地: { color: "#ffffff" }
-      }
-    },
-    popup: "类型:{类型}"
-    // flyTo: true,
-  })
-  map.addLayer(graphicLayer)
-
-  // 下面代码演示如果再config.json中配置的图层，如何绑定额外事件方法
-  // 绑定config.json中对应图层配置的"id"值图层的单击事件（比如下面是id:1987对应图层）
-  const layerTest = map.getLayerById(1987)
-  // 绑定事件
-  layerTest.on(mars3d.EventType.load, function (event) {
-    console.log("数据加载完成", event)
-  })
-
-  layerTest.on(mars3d.EventType.click, function (event) {
-    // 单击事件
-    console.log("单击了图层", event)
-  })
-}
-
-/**
- * 立体建筑物
- */
-function showBuilding() {
-  removeLayer()
-
-  graphicLayer = new mars3d.layer.GeoJsonLayer({
-    name: "建筑物面",
-    url: "//data.mars3d.cn/file/geojson/buildings-demo.json",
-    symbol: {
-      styleOptions: {
-        color: "#0d3685",
-        outlineColor: "#0d3685",
-        opacity: 0.8
-      },
-      callback: function (attr, styleOpt) {
-        const diffHeight = Number(attr.floors || 1) * Number(attr.flo_height)
-        return { height: 0, diffHeight }
-      }
-    },
-    center: { lat: 31.928659, lng: 120.420654, alt: 838, heading: 344, pitch: -42 },
-    popup: "all",
-    flyTo: true
-  })
-  map.addLayer(graphicLayer)
-
-  // 绑定事件
-  graphicLayer.on(mars3d.EventType.load, function (event) {
-    console.log("数据加载完成", event)
-  })
-}
-
-/**
- *  分层分户立体建筑物
- */
-function showFloor() {
-  removeLayer()
-
-  graphicLayer = new mars3d.layer.GeoJsonLayer({
-    name: "分层分户建筑物面",
-    url: "//data.mars3d.cn/file/geojson/huxing.json",
-    symbol: {
-      styleOptions: {
-        color: "#ffffff",
-        opacity: 0.2,
-        outline: true,
-        outlineColor: "#63AEFF",
-        outlineOpacity: 0.3,
-
-        highlight: {
-          type: "click",
-          color: "#00ffff",
-          opacity: 0.6
-        }
-      },
-      callback: function (attr, styleOpt) {
-        const flrH = attr.floorh || 0 // 底面高度
-        const lyrH = attr.layerh || 0 // 楼层高度
-
-        return { height: flrH, diffHeight: lyrH }
-      }
-    },
-    // popup: "all",
-    center: { lat: 31.821524, lng: 117.179329, alt: 255, heading: 25, pitch: -48 },
-    flyTo: true
-  })
-  map.addLayer(graphicLayer)
-
-  // 绑定事件
-  graphicLayer.on(mars3d.EventType.load, function (event) {
-    console.log("数据加载完成", event)
-  })
-}
-
-/**
- * 行政区划 ，转为wall显示
- */
-function showBoundaryWall() {
-  removeLayer()
-
-  map.setCameraView({ lat: 30.561661, lng: 117.663884, alt: 113078, heading: 346, pitch: -43 })
-
-  graphicLayer = new mars3d.layer.GeoJsonLayer({
-    name: "合肥市",
-    url: "//data.mars3d.cn/file/geojson/areas/340100_full.json",
-    symbol: {
-      type: "wall",
-      styleOptions: {
-        diffHeight: 5000, // 墙高
-        materialType: mars3d.MaterialType.LineFlow,
-        materialOptions: {
-          color: "#00ffff", // 颜色
-          opacity: 0.6, // 透明度
-          image: "img/textures/fence.png", // 图片
-          repeatX: 1, // 重复数量
-          axisY: true, // 竖直方向
-          speed: 10 // 速度
-        },
-        // 高亮时的样式
-        highlight: {
-          type: "click",
-          color: "#ffff00"
-        }
-      }
-    },
-    popup: "{name}"
-    // "tooltip": "{name}",
-    // flyTo: true,
-  })
-  map.addLayer(graphicLayer)
-
-  // 绑定事件
-  graphicLayer.on(mars3d.EventType.load, function (event) {
-    console.log("数据加载完成", event)
-  })
-  graphicLayer.on(mars3d.EventType.click, function (event) {
-    console.log("单击了图层", event)
-  })
-}
-
-/**
- * 显示特殊面数据（单体化）
- */
-let tilesetLayer
-function showMonomer() {
-  removeLayer()
-
-  // 三维模型
-  if (!tilesetLayer) {
-    tilesetLayer = new mars3d.layer.TilesetLayer({
-      name: "文庙",
-      type: "3dtiles",
-      url: "//data.mars3d.cn/3dtiles/qx-simiao/tileset.json",
-      position: { alt: 38.8 },
-      maximumScreenSpaceError: 1,
-      show: true
-    })
-    map.addLayer(tilesetLayer)
-  }
-
-  graphicLayer = new mars3d.layer.GeoJsonLayer({
-    name: "文庙-单体化",
-    url: " //data.mars3d.cn/file/geojson/dth-wm.json",
-    symbol: {
-      type: "polygonP",
-      styleOptions: {
-        // 单体化默认显示样式
-        color: "rgba(255, 255, 255, 0.01)",
-        clampToGround: true,
-        classification: true,
-        // 单体化鼠标移入或单击后高亮的样式
-        highlight: {
-          // type: mars3d.EventType.click,
-          color: "rgba(255,255,0,0.4)"
-        }
-      }
-    },
-    popup: [
-      { field: "name", name: "房屋名称" },
-      { field: "jznf", name: "建造年份" },
-      { field: "ssdw", name: "所属单位" },
-      { field: "remark", name: "备注信息" }
-    ],
-    center: { lat: 33.589442, lng: 119.031613, alt: 254, heading: 5, pitch: -37 },
-    flyTo: true
-  })
-  map.addLayer(graphicLayer)
-
-  // 绑定事件
-  graphicLayer.on(mars3d.EventType.load, function (event) {
-    console.log("数据加载完成", event)
-  })
-}
-
-/**
- * 显示世界各国
- */
-function showWorld() {
-  removeLayer()
-
-  map.setCameraView({ lat: 22.564341, lng: 89.44688, alt: 10817167, heading: 0, pitch: -87 })
-
-  graphicLayer = new mars3d.layer.GeoJsonLayer({
-    name: "国界线",
-    url: "//data.mars3d.cn/file/geojson/world.json",
-    symbol: {
-      type: "polygonP",
-      styleOptions: {
-        fill: true,
-        // color: '#ffffff',
-        // opacity: 0.01,
-        randomColor: true,
-        opacity: 0.5,
-
-        // 高亮时的样式
-        highlight: {
-          type: "click",
-          color: "#ffff00"
-        }
-      },
-      styleField: "name",
-      styleFieldOptions: {
-        Russia: { clampToGround: true }
-      }
-    },
-    popup: "{name} {name_cn}"
-  })
-  map.addLayer(graphicLayer)
-
-  // 绑定事件
-  graphicLayer.on(mars3d.EventType.load, function (event) {
-    console.log("数据加载完成", event)
-  })
-  graphicLayer.on(mars3d.EventType.click, function (event) {
-    console.log("单击了图层", event)
-  })
-}
-
-// 加载GCJ数据进行纠偏
-function showGCJ02Data() {
-  removeLayer()
-
-  const gcjLayer = new mars3d.layer.GeoJsonLayer({
-    name: "纠偏前",
-    url: "//data.mars3d.cn/file/geojson/areas/340303.json",
-    symbol: {
-      styleOptions: {
-        fill: false,
-        outline: true,
-        outlineStyle: {
-          color: "#FF0000",
-          width: 3
-        }
-      }
-    },
-    popup: "纠偏前GCJ02坐标"
-  })
-  map.addLayer(gcjLayer)
-
-  graphicLayer = new mars3d.layer.GeoJsonLayer({
-    name: "纠偏后",
-    url: "//data.mars3d.cn/file/geojson/areas/340303.json",
-    chinaCRS: mars3d.ChinaCRS.GCJ02, // 标识数据坐标，内部会纠偏
-    symbol: {
-      styleOptions: {
-        fill: false,
-        outline: true,
-        outlineStyle: {
-          color: "#00ffff",
-          width: 3
-        }
-      }
-    },
-    popup: "纠偏后WGS坐标",
-    flyTo: true
-  })
-  map.addLayer(graphicLayer)
-}
 
 var my_switch = true;
 var shanxi = "";
 function LoadMounts(mount_type){
-  //removeLayer()
+  // removeLayer()
   shanxi = mount_type;
   graphicLayer.clear()
+  //map.removeLayer(graphicLayer_3d, true)
+  removemodel();
   if(my_switch==true){
       $.ajax({
-          url: 'http://localhost:5500/search_mounts',
+          url: 'http://172.20.10.2:9936/search_mounts',
           type: 'get',
           dataType: 'json',
           data: {//传进去的
@@ -741,9 +136,195 @@ function LoadMounts(mount_type){
   }
 }
 
+function LoadCountry(country_type){
+  //removeLayer()
+  //removeLayer()
+  //map.scene.globe.terrainExaggeration = 1 // 修改地形夸张程度
+  graphicLayer.clear()
+  if(my_switch==true){
+      $.ajax({
+          url: 'http://172.20.10.2:9936/load_country',
+          type: 'get',
+          dataType: 'json',
+          data: {//传进去的
+              type:country_type
+          }, // Pass the parameter here
+          success: function (data) {//返回结果在data里 数据返回成功之后要干什么
+            $.each(data, function (index, item) {
+              console.log(item.名字);
+              add_country(item);
+            });
 
- 
+          }
+      }); 
+  }else{
+      tbodydata ='';
+      $.get('../json/课程.json',{},function(data){
+          creatTable(data);
+          console.log(data[0]["课程名"]);
+          function creatTable(data){
+           //这个函数的参数data是字符串数组，可以是从后台传过来的也可以是从其他任何地方传过来的
+          tbodydata = "<div class='box_contain'>";
+          for (var i=0;i<8;i++) {	
+              tbodydata +="<div class='pic_box'>"+"<img src='../MiaoXiu_Image/"+data[i]["课程ID"]+".jpg' alt='"+data[i]["课程ID"]+".jpg' onclick='show_product("+data[i]["课程ID"]+",1)'>"+
+                "<div class = 'name_img'><p>"+data[i]["课程名"]+"</p>"+
+                 	"<img src='../imgs/购物车.png' class='add-to-cart' alt='Image' item_id='"+data[i]["objectid"]+"' onclick='add_product("+data[i]["课程ID"]+",1)'></div></div>";
+                if(i == 3){
+                  tbodydata+="</div>";
+                  tbodydata+="<div class='box_contain'>";
+              }
+              if(i == 7){
+                  tbodydata+="</div>";
+              }
+          }
+            //现在tableData已经生成好了，把他赋值给上面的tbody
+            $("#type4").html(tbodydata);
+          }		
+      });
+  }
+}
 
+
+function add_country(item) {
+  var d_lng = 0.001;
+  var d_lat = 0;
+  let num = parseInt(item.经度);
+  lng = num + d_lng;
+  lat = parseInt(item.纬度);
+  graphicLayer_3d = new mars3d.layer.GraphicLayer({
+    name: "上海浦东",
+    data: [
+      {
+        type: "modelP",
+        position: [lng, lat, 200],
+        style: {
+          // url: "//data.mars3d.cn/gltf/mars/shanghai/pudong/scene.gltf",
+          url: "./my_model/tz1.gltf",
+          scale: 650,
+          heading: 215
+        }
+      }
+    ],
+    //center: { lat: 31.251138, lng: 121.463588, alt: 1729.97, heading: 110.7, pitch: -25, roll: 0.2 },
+    popup: item.名字,
+    //flyTo: true
+  })
+  map.addLayer(graphicLayer_3d)
+
+  // 绑定事件
+  graphicLayer_3d.on(mars3d.EventType.click, function (event) {
+    console.log("单击了图层", event)
+  });
+
+
+  var name;
+  name = item.名字;
+  const graphic = new mars3d.graphic.DivGraphic({
+  position: [item.经度, item.纬度],
+  style: {
+    
+    html: `  
+      <div class=".image-container" onclick="ShowCountry(`+ item.id +`);Move2Coutry(`+item.经度+`,`+ item.纬度+`)">    
+        <img src="../img/3d_point/样式1.png" class="graphic-image" alt="Graphic Image" width="50" height="100"/>    
+        <div class="text-on-image ">    
+          ${name}    
+        </div>    
+      </div> 
+      `,  
+      horizontalOrigin: Cesium.HorizontalOrigin.CENTER, // 通常图片居中显示时设置为CENTER  
+      verticalOrigin: Cesium.VerticalOrigin.CENTER,  
+      clampToGround: true,  
+      pixelOffset: new Cesium.Cartesian2(0, -25), // 可能需要调整这个值来确保文字在图片内部或上方  
+      // 其他样式...  
+  },
+  attr: { remark: "示例1" }
+  })
+  //graphicLayer.addGraphic(graphic)
+  graphic.addTo(graphicLayer)
+}
+
+function Move2Coutry(lng,lat){
+  var d_lat = -2.5;
+  var d_lng = -0.1;
+  var d_heading = 15;
+  var d_alt = 35000;
+  var d_pitch = 5;
+  
+  map.setCameraView({ lat: lat+d_lat, lng: lng+d_lng, alt: 10000+d_alt, heading: 0+d_heading, pitch: -10+d_pitch })
+}
+
+function ShowCountry(id){
+  $.ajax({
+    url: 'http://172.20.10.2:9936/search_countryinfo',
+    type: 'get',
+    dataType: 'json',
+    data: {//传进去的
+        type:id
+    }, // Pass the parameter here
+    success: function (data) {//返回结果在data里 数据返回成功之后要干什么
+      $.each(data, function (index, item) {
+          console.log(item.名字);
+          addCountryInfo(item);
+      });
+
+    }
+});
+}
+
+
+//把信息添加到div并显示
+function addCountryInfo(item){
+
+  // 隐藏 id 为 "info" 的 div，并设置新的 HTML 内容
+  $("#info").hide();
+  $(".jieshao").hide();
+  $("#shunxu").hide();
+  $("#last").hide();
+  $("#next").hide();
+  // 修改 <h2> 标签的内容
+$("#jd").text("现代解读");
+  var country_class = "——"+item.顺序;
+  $("#Mount_class").html(country_class);
+  $("#Mount_name").html(item.名字);
+  var position = "在今";
+  if(item.省==null){
+    position = "暂无记载";
+  }else{
+    position += item.省;
+    if(item.市!=null){ 
+    position += item.市;
+    }
+  }
+  $("#position").html(position);
+  $("#feature").html(item.国民特点);
+  $("#yw").html(item.原文);
+  $("#fy").html(item.翻译);
+  var xdjd = `<p class="xdjd">`+item.现代解读+`</p>`;
+  $("#yishoubox").html(xdjd);
+  // var bd_map = new BMapGL.Map("map");                // 创建地图实例
+  // lng = parseFloat(item.经度);
+  // lat = parseFloat(item.纬度);
+  // var point = new BMapGL.Point(lng, lat); 
+  // var marker = new BMapGL.Marker(point);        // 创建标注   
+  // bd_map.addOverlay(marker);   
+  // bd_map.centerAndZoom(point, 5);                      // 设置地图级别
+  // bd_map.enableScrollWheelZoom(true); 
+  // bd_map.setMapStyleV2({     
+  //   styleId: '6e33d976c728aa940a5926779afb5000'
+  // });
+  var country_img = `<img src=../img/国家/`+item.id+`.png class = "country_img">`;
+  $("#map").html(country_img);
+  $("#info").slideDown("slow");
+
+  var element = document.getElementsByClassName('bottom-container')[0];  
+  if (element) {  
+      element.style.right = "80%";  
+  }
+  var element2 = document.getElementsByClassName('huadong-container')[0];  
+  if (element2) {  
+      element2.style.right = "60%";  
+  }
+}
 
 function addDemoGraphic(graphicLayer,item){
     var name;
@@ -777,22 +358,95 @@ function addDemoGraphic(graphicLayer,item){
 }
 
 function Move2Mount(lng,lat){
-  d_lat = -1.7;
-  d_lng = 0.7;
-  map.setCameraView({ lat: lat+d_lat, lng: lng+d_lng, alt: 50000, heading: 0, pitch: -10 })
+  var d_lat = 0;
+  var d_lng = 0;
+  var d_heading = 0;
+  var d_alt = 0;
+  var d_pitch = 0;
+  if(shanxi=="东山一经"){
+      d_lat = -1.7;
+      d_lng = 0.7;
+  }
+  else if(shanxi=="西山一经"){
+    d_lat = -1.7;
+    d_lng = 0.7;
+    d_alt = 10000
+  }
+  else if(shanxi=="南山一经"){
+    d_lat = -1.7;
+    d_lng = 0.7;
+  }
+  else if(shanxi=="北山一经"){
+    d_lat = -1.7;
+    d_lng = 0.7;
+    d_alt = 130000;
+    d_pitch = -25;
+  }
+  else if(shanxi=="中山一经"){
+    d_lat = -1.7;
+    d_lng = 0.7;
+  }
+  map.setCameraView({ lat: lat+d_lat, lng: lng+d_lng, alt: 50000+d_alt, heading: 0+d_heading, pitch: -10+d_pitch })
 }
 
 function mapSetViewList_East() {
   // 视角切换（分步执行）, stop设置停留在该视角的时间
   map.setCameraViewList([
     { lng: 119.603673, lat: 27.567127, alt: 1334000, heading: 341.5, pitch: -66.7, duration: 2, stop: 0 },
-    { lng: 119.760718, lat: 28.610673, alt: 529296, heading: 348.3, pitch: -39.2, duration: 2, stop: 0 },
+    // { lng: 119.760718, lat: 28.610673, alt: 529296, heading: 348.3, pitch: -39.2, duration: 1, stop: 0 },
     { lng: 118.694228, lat: 33.007278, alt: 238687.9, heading: 2.4, pitch: -37.3, duration: 2, stop: 0 },
   ])
   //show_first();
   setTimeout(function() {
     show_first();
-  }, 6000);
+  }, 4000);
+}
+function mapSetViewList_West(){
+  map.setCameraViewList([
+    // { lng: 115.411108, lat: 21.347051, alt: 1422594.6, heading: 358.5, pitch: -40.6, duration: 1, stop: 0 },
+    { lng: 102.227112, lat: 24.271745, alt: 1054622, heading: 26.2, pitch: -52.3, duration: 2, stop: 0 },
+    { lng: 111.033792, lat: 32.54237, alt: 391493.9, heading: 23.8, pitch: -73.2, duration: 2, stop: 0 }
+  ])
+  //show_first();
+  setTimeout(function() {
+    show_first();
+  }, 4000);
+}
+
+function mapSetViewList_North(){
+  map.setCameraViewList([
+    // { lng: 115.411108, lat: 21.347051, alt: 1422594.6, heading: 358.5, pitch: -40.6, duration: 1, stop: 0 },
+    { lng: 107.826114, lat: 24.158853, alt: 1756981.9, heading: 347.3, pitch: -43.5, duration: 2, stop: 0 },
+    { lng: 108.869743, lat: 35.772161, alt: 510467, heading: 345, pitch: -65, duration: 2, stop: 0 }
+  ])
+  //show_first();
+  setTimeout(function() {
+    show_first();
+  }, 4000);
+}
+
+function mapSetViewList_South(){
+  map.setCameraViewList([
+    // { lng: 115.411108, lat: 21.347051, alt: 1422594.6, heading: 358.5, pitch: -40.6, duration: 1, stop: 0 },
+    { lng: 117.72653, lat: 18.573372, alt: 2090263.4, heading: 337.2, pitch: -64.1, duration: 2, stop: 0 },
+    { lng: 113.752932, lat: 23.500647, alt: 580498.1, heading: 337.7, pitch: -71.9, duration: 2, stop: 0 }
+  ])
+  //show_first();
+  setTimeout(function() {
+    show_first();
+  }, 4000);
+}
+
+function mapSetViewList_Middle(){
+  map.setCameraViewList([
+    // { lng: 115.411108, lat: 21.347051, alt: 1422594.6, heading: 358.5, pitch: -40.6, duration: 1, stop: 0 },
+    { lng: 116.587903, lat: 24.984845, alt: 1697972.7, heading: 345, pitch: -65, duration: 2, stop: 0 },
+    { lng: 111.673706, lat: 33.922938, alt: 181734.9, heading: 336.8, pitch: -60.9, duration: 2, stop: 0 }
+  ])
+  //show_first();
+  setTimeout(function() {
+    show_first();
+  }, 4000);
 }
 
 
@@ -806,7 +460,7 @@ var now_shunxu;
 function ShowInfo(id){
   if(my_switch==true){
       $.ajax({
-          url: 'http://localhost:5500/search_mountinfo',
+          url: 'http://172.20.10.2:9936/search_mountinfo',
           type: 'get',
           dataType: 'json',
           data: {//传进去的
@@ -854,7 +508,7 @@ function ShowInfo(id){
 
 function Showyishou(id){
   $.ajax({
-    url: 'http://localhost:5500/search_YS',
+    url: 'http://172.20.10.2:9936/search_YS',
     type: 'get',
     dataType: 'json',
     data: {//传进去的
@@ -879,13 +533,18 @@ function addInfo(){
   // 隐藏 id 为 "info" 的 div，并设置新的 HTML 内容
   $("#info").hide();
   $(".jieshao").hide();
+
   $("#shunxu").html(mountinfo.顺序介绍);
-  $("#Mount_name").html(mountinfo.所属山系);
+  var mount_class = "——《"+mountinfo.所属山系+"》";
+  $("#Mount_class").html(mount_class);
   $("#Mount_name").html(mountinfo.名字);
   $("#position").html(mountinfo.位置);
   $("#feature").html(mountinfo.特征);
   $("#yw").html(mountinfo.原文);
   $("#fy").html(mountinfo.翻译);
+  $("#last").show();
+  $("#next").show();
+  $("#shunxu").show();
   var bd_map = new BMapGL.Map("map");                // 创建地图实例
   lng = parseFloat(mountinfo.经度);
   lat = parseFloat(mountinfo.纬度);
@@ -916,13 +575,21 @@ function addInfo(){
   }    // 使用 slideDown() 方法以动画效果向左滑动显示内容
   $("#info").slideDown("slow");
   have_animal = false;
+  var element = document.getElementsByClassName('bottom-container')[0];  
+  if (element) {  
+      element.style.right = "80%";  
+  }
+  var element2 = document.getElementsByClassName('huadong-container')[0];  
+  if (element2) {  
+      element2.style.right = "60%";  
+  }
 }
 
 
 function show_yishou(id){
   // $(".jieshao").slideUp("slow");//返回结果在data里 数据返回成功之后要干什么
   $.ajax({
-    url: 'http://localhost:5500/search_animal',
+    url: 'http://172.20.10.2:9936/search_animal',
     type: 'get',
     dataType: 'json',
     data: {//传进去的
@@ -955,7 +622,7 @@ function change_mount(num){
     shunxu = now_shunxu + 1;
   }
   $.ajax({
-    url: 'http://localhost:5500/search_mount',
+    url: 'http://172.20.10.2:9936/search_mount',
     type: 'get',
     dataType: 'json',
     data: {//传进去的
@@ -965,6 +632,7 @@ function change_mount(num){
     success: function (data) {
       $.each(data, function (index, item) {
         //console.log(item.所属山系);
+        addDemoGraphic(graphicLayer, item);
         id = item.id;
         Showyishou(id);
         ShowInfo(id);
@@ -979,7 +647,7 @@ function change_mount(num){
 
 function show_first(){
   $.ajax({
-    url: 'http://localhost:5500/search_mount',
+    url: 'http://172.20.10.2:9936/search_mount',
     type: 'get',
     dataType: 'json',
     data: {//传进去的
@@ -1004,7 +672,16 @@ function show_first(){
 $("#hideInfoBtn").click(function() {
   // 隐藏 id 为 "info" 的 div
   $("#info").slideUp("slow");
-});
+    var element = document.getElementsByClassName('bottom-container')[0];  
+    if (element) {  
+        element.style.right = "50%";  
+    }
+    var element2 = document.getElementsByClassName('huadong-container')[0];  
+    if (element2) {  
+        element2.style.right = "0%";  
+    }
+  }
+);
 
 function hide_yishou(){
   $(".jieshao").slideUp("slow");
@@ -1046,6 +723,7 @@ elements.forEach(function(element) {
   });  
 });
 
+
 document.addEventListener('DOMContentLoaded', function() {    
   const searchForm = document.getElementById('searchForm');    
   searchForm.addEventListener('submit', function(event) {    
@@ -1056,19 +734,65 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 发送GET请求到/get_mountains，并附带查询参数    
     $.ajax({
-      url: 'http://localhost:5500/get_mountains',
+      url: 'http://172.20.10.2:9936/get_mountains',
       type: 'get',
       dataType: 'json',
       data: {//传进去的
           name:searchTerm
       }, // Pass the parameter here
-      success: function (data) {//返回结果在data里 数据返回成功之后要干什么
-        console.log(data)
-        graphicLayer.clear()
-        $.each(data, function (index, item) {
-          addDemoGraphic(graphicLayer,item)
-        });
+      success: function (data) {  
+        console.log(data);  
+        // 假设 graphicLayer 是之前定义的某个变量，用于清除旧的内容  
+        graphicLayer.clear();  
 
+        //移除之前的
+        var parentDiv1 = document.getElementById('xialakuang');
+        while (parentDiv1.firstChild) {  
+          parentDiv1.removeChild(parentDiv1.firstChild);  
+        } 
+        $.each(data, function (index, item) {  
+          // 创建一个新的 a 元素  
+          const boxDiv = document.createElement('a');  
+          boxDiv.className = 'dropdown-content-item'; // 假设您有一个对应的CSS类  
+            
+          // 设置 a 元素的文本内容  
+          boxDiv.textContent = `${item.名字} ${item.所属山系}`; // 假设item对象有'名字'和'所属山系'属性 
+          // 为 a 元素添加点击事件监听器  
+          boxDiv.addEventListener('click', function(event) {  
+            // 阻止默认的链接行为（如果需要）  
+            event.preventDefault();  
+            addDemoGraphic(graphicLayer, item); // 假设这个函数存在并且您已经定义了graphicLayer 
+            shanxi = item.所属山系; 
+            id = item.id;
+            Showyishou(id);
+            ShowInfo(id);
+            lng = parseFloat(item.经度);
+            lat = parseFloat(item.纬度);
+            Move2Mount(lng,lat);  
+            // 可以在这里添加其他点击后的操作，比如打开一个弹窗等  
+          });  
+          // 获取父容器元素  
+          var parentDiv = document.getElementById('xialakuang');  
+            
+          // 确保parentDiv存在，否则appendChild会失败  
+          if (parentDiv) {  
+            // 将 a 元素添加到父容器中  
+            parentDiv.appendChild(boxDiv); 
+          } else {  
+            console.error('没有找到ID为xialakuang的元素');  
+          }  
+        });
+        const boxDiv = document.createElement('a');  
+          boxDiv.className = 'dropdown-content-item'; // 假设您有一个对应的CSS类  
+            
+          // 设置 a 元素的文本内容  
+          boxDiv.textContent = `清除`; 
+          boxDiv.addEventListener('click', function(event) {  
+            // 阻止默认的链接行为（如果需要）  
+            clear_search();  
+          });  
+          var parentDiv = document.getElementById('xialakuang');  
+          parentDiv.appendChild(boxDiv); 
       },
       error: function (jqXHR, textStatus, errorThrown) {  
         // 请求失败时的处理  
@@ -1078,6 +802,99 @@ document.addEventListener('DOMContentLoaded', function() {
   });    
 });
 
+// 获取所有的.image-with-text元素  
+var elements2 = document.querySelectorAll('.image-with-text2');  
+  
+// 遍历所有元素，除了第一个，都设置为inactive  
+elements2.forEach(function(element, index) {  
+  if (index < element.length-1 ) {  
+    element.classList.remove('active2');
+    element.classList.add('inactive2');  
+ // 如果之前有active类的话  
+  } else {  
+    // 第一个元素设置为active  
+    element.classList.add('active2');  
+    element.classList.remove('inactive2'); // 移除可能存在的inactive类  
+  }  
+});  
+  
+// 如果需要，你还可以为每个元素添加点击事件监听器来切换状态  
+elements2.forEach(function(element) {  
+  element.addEventListener('click', function() {  
+    // 移除所有元素的active类  
+    elements2.forEach(function(el) {  
+      el.classList.remove('active2');  
+      el.classList.add('inactive2');
+      el.querySelector('img').src = '../img/3d_point/滑动图标2.png'
+    });  
+    this.classList.remove('inactive2');
+    // 添加当前元素的active类  
+    this.classList.add('active2');  
+    if (this.id =='shan') this.querySelector('img').src = '../img/3d_point/山.png'
+    if (this.id =='guo') this.querySelector('img').src = '../img/3d_point/国.png'
+  });  
+});
+
+function drawBox(container, dataItem) {  
+  // 创建一个新的div元素作为框  
+  const boxDiv = document.createElement('div');  
+  boxDiv.className = 'box'; // 应用CSS样式  
+  boxDiv.textContent = "dataItem.名字"+"  "+"dataItem.所属山系"; // 设置框中的文本内容
+
+  // 将新的div元素添加到容器中  
+  container.appendChild(boxDiv);  
+}  
+
+function clear_search(){
+  var parentDiv1 = document.getElementById('xialakuang');
+  while (parentDiv1.firstChild) {  
+    parentDiv1.removeChild(parentDiv1.firstChild);  
+  }
+}
+
+function MountOrCountry(data){
+  var elements = document.getElementsByClassName('active2'); // 假设这是你的HTMLCollection  
+if (elements.length > 0) {  
+    var id = elements[0].id; // 正确获取第一个元素的ID  
+    console.log(id); // 应该打印出 "shan" 或 "guo"，取决于它们在文档中的顺序  
+} else {  
+    console.log('No elements found with class "active2".');  
+}
+  if(id=="shan"){
+    //map.scene.globe.terrainExaggeration = 13 // 修改地形夸张程度
+    LoadMounts(data);
+    if(data == "东山一经"){
+    mapSetViewList_East();
+    }else if(data == "西山一经"){
+    mapSetViewList_West()
+    }else if(data == "南山一经"){
+      mapSetViewList_South()
+    }else if(data == "北山一经"){
+      mapSetViewList_North()
+    }else if(data == "中山一经"){
+      mapSetViewList_Middle()
+    }
+  } 
+  else if(id=="guo"){
+    map.scene.globe.terrainExaggeration = 1 // 修改地形夸张程度
+    if(data == "南山一经"){
+    LoadCountry('海外南经');
+    mapSetViewList_country();
+    }
+  }
+}
+
+function chage_terrain(type){
+  if(type == 1){
+    map.scene.globe.terrainExaggeration = 13
+  }else{
+    map.scene.globe.terrainExaggeration = 1
+  }
+}
+
+function mapSetViewList_country(){
+  map.setCameraView({ lat:20.346768, lng: 115.125024, alt: 2374000, heading: 345, pitch: -66.4 })
+}
   // // 获取图片元素和提示框元素
   // var image = document.getElementById("last");
   // var tooltip = document.getElementById("last_tip");
