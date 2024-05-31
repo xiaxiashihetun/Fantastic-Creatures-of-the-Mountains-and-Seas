@@ -1,45 +1,47 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" /> 
-    <!--引入cesium基础lib--> 
-    <link href="https://unpkg.com/mars3d-cesium@latest/Build/Cesium/Widgets/widgets.css" rel="stylesheet" type="text/css" />
-    <script src="https://unpkg.com/mars3d-cesium@latest/Build/Cesium/Cesium.js" type="text/javascript" ></script>
-    <!--引入mars3d库lib-->
-    <link href="https://unpkg.com/mars3d@latest/dist/mars3d.css" rel="stylesheet" type="text/css" />
-    <script src="https://unpkg.com/mars3d@latest/dist/mars3d.js" type="text/javascript" ></script>   
-    <style>
-        html, body, .mars3d-container {
-          height: 100%;
-          width: 100%;
-          margin: 0;
-          padding: 0;
-          border: none;
-          overflow: hidden;
-        }
-      </style>
-    </head>
-    <body>
-        <!-- 为 Mars3D 准备一个定义了宽高的 DOM -->
-    <div id="mars3dContainer" class="mars3d-container"></div>
-    <script type="text/javascript">
-      var mapOptions = {
-        scene: {
-          center: { lat: 32.086616, lng: 118.731447, alt: 97704, heading: 244, pitch: -22 }
-      },
-        basemaps: [
-        {
-          name: "ArcGIS影像",
-          icon: "/img/basemaps/esriWorldImagery.pngg",
-          type: "xyz",
-          url: "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-          show: true,
-          enablePickFeatures: false
-        }
-      ]
-      };
-      var map = new mars3d.Map("mars3dContainer", mapOptions); //支持的参数请看API文档：http://mars3d.cn/api/Map.html
-      map.scene.globe.terrainExaggeration = 10;// 修改地形夸张程度
-    </script>
-    </body>
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>山海经奥境智游系统</title>  
+    <!-- 引入CSS样式文件 -->  
+    <link rel="stylesheet" href="./css/home.css">  
+    <!-- 引入JavaScript脚本文件 -->  
+    <script src="../js/home.js" defer></script>  
+</head>  
+<body>  
+    <div class="image6">  
+        <a href=""> <!-- 替换为你想要跳转的URL -->  
+            <img src="./img/home/凤凰.png" alt="古观山海" width="1400" height="700">  
+        </a>  
+    </div>  
+    <div class="image1">  
+        <a href="./basis/index.html"> <!-- 替换为你想要跳转的URL -->  
+            <img src="./img/home/古观山海.png" alt="古观山海" width="200" height="470">  
+        </a>  
+    </div>  
+    <div class="image2">  
+        <a href="https://example.com/destination2"> <!-- 替换为你想要跳转的URL -->  
+            <img src="./img/home/云游山海.png" alt="云游山海" width="200" height="470"> <!-- 建议alt属性与图片内容相关 -->  
+        </a>  
+    </div>  
+    <div class="image3">  
+        <a href="https://example.com/destination3"> <!-- 替换为你想要跳转的URL -->  
+            <img src="./img/home/山海社区.png" alt="山海社区" width="200" height="470"> <!-- 建议alt属性与图片内容相关 -->  
+        </a>  
+    </div>  
+    <div class="image4">  
+        <a href="https://example.com/destination4"> <!-- 替换为你想要跳转的URL -->  
+            <img src="./img/home/山海足迹.png" alt="山海足迹" width="200" height="470"> <!-- 建议alt属性与图片内容相关 -->  
+        </a>  
+    </div>  
+    <div class="image5">  
+        <a href="https://example.com/login"> <!-- 替换为你想要跳转的登录页面URL -->  
+            <img src="./img/home/登录.png" alt="登录" width="200" height="100"> <!-- 建议alt属性与图片内容相关 -->  
+        </a>  
+    </div>
+
+  
+
+</body>  
 </html>
