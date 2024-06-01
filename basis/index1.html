@@ -36,8 +36,6 @@
     <link href="../css/divGraphic.css" rel="stylesheet" />
     <link href="../css/qly_style.css" rel="stylesheet" />
     <link href="../css/yy.css" rel="stylesheet" />
-    <link rel="stylesheet" type="text/css" href="../intro.js/introjs.css">
-    <link href="../intro.js/themes/introjs-modern.css" rel="stylesheet">
 
   </head>
 
@@ -46,20 +44,20 @@
     <a href="../index.html">
         <img src="../img/3d_point/返回.png" alt="Your Image" class="fixed-image">
     </a>
-    <form id="searchForm" class="search-form" data-intro="此处可以通过山名查询山脉信息" data-step="7">  
+    <form id="searchForm" class="search-form">  
       <div class="search-input">  
           <input type="text" placeholder="Search..." id="searchTerm">  
           <button type="submit"><i class="fa fa-search"></i></button>
       </div>  
     </form>
-    <div class="dropdown-content" id="xialakuang" data-intro="点击搜索结果可以浏览详细信息" data-step="8">
+    <div class="dropdown-content" id="xialakuang">
     </div>
-    <div id="info" class="my_infoview"   data-intro="山川详细介绍" data-step="2">
+    <div id="info" class="my_infoview">
       <div class="container">
         <img src="../img/yishou/收起.png" alt="Your Image" class="shouqi">
         <p class="sq_text" id="hideInfoBtn">收起</p>
       </div>
-      <div class="container"   data-intro="此处可以切换介绍的山" data-step="5">
+      <div class="container">
         <h1 id = "Mount_name" class="info_title">舟山</h1>
         <img src="../img/yishou/上一个.png" alt="Your Image" class="cursor" id="last" onclick="change_mount(1)">
         <div class="tooltip" id="last_tip">上一座山</div>
@@ -78,7 +76,7 @@
                 <h2>特征</h2> 
                 <p id="feature" class="info_text">在今山东济南附近</p>
             </div>
-            <div class="map_box" id="map" data-intro="二维地理位置介绍" data-step="3">
+            <div class="map_box" id="map">
 
             </div>
           </div>
@@ -100,7 +98,7 @@
                     </div>
                 </div>
               </div>
-            <div id="yishou" class="jieshao"  data-intro="在山上生活的异兽介绍" data-step="4">
+            <div id="yishou" class="jieshao">
                 <h1 id="ys_name">鳙鳙鱼</h1>
                 <hr>
                 <table border="1">
@@ -148,7 +146,7 @@
       </div>
     </div>
 
-    <div class="huadong-container" data-title="第一步" data-intro="点击此处可以切换不同山系的山川👋" data-step="1">  
+    <div class="huadong-container">  
       <div class="image-with-text">  
         <img src="../img/3d_point/滑动图标1.png" class="graphic-image" alt="Graphic Image" width="30" height="30"  onclick="MountOrCountry('东山一经')"/>  
         <div class="text-on-image">东</div>  
@@ -171,19 +169,17 @@
       </div>
     </div>
 
-    <div class="bottom-container"  data-intro="此处可以切换国和山" data-step="6">  
+    <div class="bottom-container">  
       <div class="image-with-text2" id="shan">  
-        <img src="../img/3d_point/山.png" class="graphic-image" alt="Graphic Image" width="30" height="30"  onclick="LoadMounts('山');"/>    
+        <img src="../img/3d_point/山.png" class="graphic-image" alt="Graphic Image" width="30" height="30"  onclick="chage_terrain(1)"/>    
       </div>  
       <div class="image-with-text2" id="guo" >  
-        <img src="../img/3d_point/滑动图标2.png" class="graphic-image" alt="Graphic Image" width="10" height="10"   onclick="LoadCountry('海外南经');mapSetViewList_country();hide_info()"/>  
+        <img src="../img/3d_point/滑动图标2.png" class="graphic-image" alt="Graphic Image" width="10" height="10"  onclick="chage_terrain(0)"/>  
       </div>  
     </div>
     
     <script src="../js/common.js"></script>
     <script src="./map.js"></script>
-    <script src="..//intro.js/intro.js"></script>
-    <script src="..//intro.js/intro_step.js"></script>
     <script type="text/javascript"></script>
   </body>
 </html>

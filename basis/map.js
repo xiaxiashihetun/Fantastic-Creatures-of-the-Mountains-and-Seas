@@ -683,6 +683,18 @@ $("#hideInfoBtn").click(function() {
   }
 );
 
+function hide_info(){
+  $("#info").slideUp("slow");
+  var element = document.getElementsByClassName('bottom-container')[0];  
+  if (element) {  
+      element.style.right = "50%";  
+  }
+  var element2 = document.getElementsByClassName('huadong-container')[0];  
+  if (element2) {  
+      element2.style.right = "0%";  
+  }
+}
+
 function hide_yishou(){
   $(".jieshao").slideUp("slow");
 }
