@@ -907,6 +907,13 @@ function chage_terrain(type){
 function mapSetViewList_country(){
   map.setCameraView({ lat:20.346768, lng: 115.125024, alt: 2374000, heading: 345, pitch: -66.4 })
 }
+
+
+function redirectToAnotherPage() {
+  // 执行页面跳转操作，例如跳转到另一个网页
+  window.location.href = '../lvyou/lvyou.html';
+}
+
   // // 获取图片元素和提示框元素
   // var image = document.getElementById("last");
   // var tooltip = document.getElementById("last_tip");
