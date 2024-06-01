@@ -10,7 +10,7 @@
     /* border: 1px solid rgba(128, 128, 128, 0.5); */
     background: #AF9267 ;
     box-shadow: 0 3px 14px rgba(128, 128, 128, 0.5);
-    z-index: 19870101;
+    z-index: 9998;
     overflow-y: auto; /* 当内容超出高度时显示垂直滚动条 */
     display: none; 
     color: #333;

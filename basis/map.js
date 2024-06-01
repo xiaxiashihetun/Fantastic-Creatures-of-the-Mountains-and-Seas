@@ -683,6 +683,18 @@ $("#hideInfoBtn").click(function() {
   }
 );
 
+function hide_info(){
+  $("#info").slideUp("slow");
+  var element = document.getElementsByClassName('bottom-container')[0];  
+  if (element) {  
+      element.style.right = "50%";  
+  }
+  var element2 = document.getElementsByClassName('huadong-container')[0];  
+  if (element2) {  
+      element2.style.right = "0%";  
+  }
+}
+
 function hide_yishou(){
   $(".jieshao").slideUp("slow");
 }
@@ -895,6 +907,13 @@ function chage_terrain(type){
 function mapSetViewList_country(){
   map.setCameraView({ lat:20.346768, lng: 115.125024, alt: 2374000, heading: 345, pitch: -66.4 })
 }
+
+
+function redirectToAnotherPage() {
+  // 执行页面跳转操作，例如跳转到另一个网页
+  window.location.href = '../lvyou/lvyou.html';
+}
+
   // // 获取图片元素和提示框元素
   // var image = document.getElementById("last");
   // var tooltip = document.getElementById("last_tip");
